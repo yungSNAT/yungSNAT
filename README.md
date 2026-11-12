@@ -25,6 +25,7 @@ Free tools for coding agents, privacy and documents, mostly in Rust.
 - [GhostSoap](https://github.com/yungSNAT/GhostSoap): prepare Australian Privacy Act requests to data brokers, for you to send from your own mailbox.
 - [Alcuin](https://github.com/yungSNAT/Alcuin): ask ChatGPT, or the OpenAI or Azure OpenAI API, about your source files from a CLI or MCP server, and keep each answer.
 - [DiogenesLamp](https://github.com/yungSNAT/DiogenesLamp): browse Yupoo catalogues on one searchable local page, covers and metadata only.
+- [ShaphansAudit](https://github.com/yungSNAT/ShaphansAudit): find where a coding agent's tokens go, from the transcripts Claude Code and Codex save on your machine.
 
 ## Forks
 
@@ -32,6 +33,7 @@ Free tools for coding agents, privacy and documents, mostly in Rust.
 - [PascalsLetter](https://github.com/yungSNAT/PascalsLetter): a distribution of RTK, which compresses command output before a coding agent reads it.
 - [GrievousGreps](https://github.com/yungSNAT/GrievousGreps): a distribution of Trail-Code, a code graph that shows a coding agent what a change reaches before it edits.
 - [ApollinaireASCII](https://github.com/yungSNAT/ApollinaireASCII): a Rust library, CLI and browser editor for ASCII art, block lettering and animation, from RASCII.
+- [reformed-agent](https://github.com/yungSNAT/reformed-agent): a Rust-first autonomous agent runtime, from Hermes Agent Ultra.
 - [PamweChete](https://github.com/yungSNAT/PamweChete): a pi coding-agent configuration to copy piece by piece (archived).
 
 Fixes the forks offer upstream are listed in [FORKS.md](https://github.com/yungSNAT/yungSNAT/blob/main/FORKS.md).
