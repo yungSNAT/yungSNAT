@@ -20,7 +20,7 @@ Free tools for coding agents, privacy and documents, mostly in Rust.
 
 ## Tools
 
-- [Puritanical](https://github.com/yungSNAT/Puritanical): the smallest correct change, verified. A skill for Claude Code, Codex and other coding agents.
+- [Puritanical](https://github.com/yungSNAT/Puritanical): the smallest correct change, verified. A skill for Claude Code, Codex and other coding agents, from Ponytail.
 - [Laconic](https://github.com/yungSNAT/Laconic): answer-first output and an AI-text humaniser in Australian English, for coding agents.
 - [GhostSoap](https://github.com/yungSNAT/GhostSoap): prepare Australian Privacy Act requests to data brokers, for you to send from your own mailbox.
 - [Alcuin](https://github.com/yungSNAT/Alcuin): ask ChatGPT, or the OpenAI or Azure OpenAI API, about your source files from a CLI or MCP server, and keep each answer.
