@@ -8,7 +8,8 @@ set -euo pipefail
 EXCLUDE="${EXCLUDE:-}"
 
 # grep exits 1 on no match, the only non-zero status that is a clean result;
-# 2 (a bad pattern or read error) ends the script with that status.
+# 2 (a bad pattern or read error) ends the script with that status, even
+# when the input is empty.
 nomatch_ok() { [ "$1" -eq 1 ] || exit "$1"; }
 
 # grep reads a newline in a pattern as 2 patterns, and an empty one matches
@@ -17,11 +18,6 @@ for pattern in "$SHIPPED" "$EXCLUDE"; do
   if [[ $pattern == *$'\n'* ]]; then
     echo "::error::The shipped and exclude patterns must be one line each."
     exit 2
-  fi
-  # Checked up front, so a bad pattern fails even when nothing it would
-  # filter has changed.
-  if [ -n "$pattern" ]; then
-    grep -E -- "$pattern" </dev/null || nomatch_ok $?
   fi
 done
 
@@ -51,7 +47,11 @@ if awk '/^@@/ { hunk = 1; next } hunk && /^\+/ && substr($0, 2) ~ /[^[:space:]]/
   exit 0
 fi
 
+# File names are untrusted: stop workflow commands whilst printing them.
+token=$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')
 echo "Shipped files changed:"
+echo "::stop-commands::$token"
 tr '\0' '\n' <"$list/shipped"
+echo "::$token::"
 echo "::error file=CHANGELOG.md::This pull request changes shipped files but adds no line to CHANGELOG.md. Add one under ${HEADING}, or apply the skip-changelog label if users will not notice the change."
 exit 1

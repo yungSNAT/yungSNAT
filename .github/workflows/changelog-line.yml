@@ -26,9 +26,9 @@ jobs:
           persist-credentials: false
       - name: Run the script's tests
         run: bash .github/actions/changelog-line/test.sh
-      # The action itself, through action.yml. github.sha~1 is the previous
-      # main commit (on a pull request, the base tip), so the range is this
-      # change. test.sh covers the exit statuses; these steps prove the wiring.
+      # The action itself, through action.yml, over github.sha's first parent
+      # and github.sha (on a pull request, the base tip and the merge). test.sh
+      # covers the exit statuses; these steps prove the wiring.
       - name: Run the action with nothing shipped
         uses: ./.github/actions/changelog-line
         with:
