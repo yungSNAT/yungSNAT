@@ -25,4 +25,4 @@ This file indexes yungSNAT's GitHub repositories. Where a repository has its own
 
 ## Reuse
 
-- [Reusing this repository](https://github.com/yungSNAT/yungSNAT/blob/main/AGENTS.md#reusing-this-code): Ryan Duguid's work, with no licence; beyond copyright exceptions and GitHub's terms, ask him first; public credit is requested.
+- [Reusing this repository](https://github.com/yungSNAT/yungSNAT/blob/main/AGENTS.md#reusing-this-code): the work of Ryan Duguid (https://github.com/ryanduguid), with no licence; beyond copyright exceptions and GitHub's terms, ask him first; public credit is requested.
