@@ -7,16 +7,38 @@ set -euo pipefail
 : "${BASE:?BASE is required}" "${HEAD:?HEAD is required}" "${SHIPPED:?SHIPPED is required}" "${HEADING:?HEADING is required}"
 EXCLUDE="${EXCLUDE:-}"
 
-# -z prints every path unquoted (moved and non-ASCII paths included);
-# --no-renames lists a moved file under its old path as well as its new one.
-files=$(git diff -z --no-renames --name-only "$BASE...$HEAD" | tr '\0' '\n')
+# grep exits 1 on no match, the only non-zero status that is a clean result;
+# 2 (a bad pattern or read error) ends the script with that status.
+nomatch_ok() { [ "$1" -eq 1 ] || exit "$1"; }
 
-# grep exits 1 on no match and 2 on a bad pattern; only 1 is a clean result.
-matched=$(grep -E -- "$SHIPPED" <<<"$files") || { status=$?; [ "$status" -eq 1 ] || exit "$status"; }
-if [ -n "$EXCLUDE" ] && [ -n "$matched" ]; then
-  matched=$(grep -vE -- "$EXCLUDE" <<<"$matched") || { status=$?; [ "$status" -eq 1 ] || exit "$status"; }
+# grep reads a newline in a pattern as 2 patterns, and an empty one matches
+# everything, so a YAML block scalar's trailing newline would void the check.
+for pattern in "$SHIPPED" "$EXCLUDE"; do
+  if [[ $pattern == *$'\n'* ]]; then
+    echo "::error::The shipped and exclude patterns must be one line each."
+    exit 2
+  fi
+  # Checked up front, so a bad pattern fails even when nothing it would
+  # filter has changed.
+  if [ -n "$pattern" ]; then
+    grep -E -- "$pattern" </dev/null || nomatch_ok $?
+  fi
+done
+
+# The list stays NUL-separated, in files because bash drops NUL bytes from
+# variables, so no path is split or read as binary: -z prints every path
+# unquoted (non-ASCII and moved paths included), grep -a reads paths that are
+# not valid UTF-8 as text, and --no-renames lists a moved file under its old
+# path as well as its new one.
+list=$(mktemp -d)
+trap 'rm -rf "$list"' EXIT
+git diff -z --no-renames --name-only "$BASE...$HEAD" >"$list/changed"
+grep -azE -- "$SHIPPED" <"$list/changed" >"$list/shipped" || nomatch_ok $?
+if [ -n "$EXCLUDE" ]; then
+  grep -azvE -- "$EXCLUDE" <"$list/shipped" >"$list/kept" || nomatch_ok $?
+  mv "$list/kept" "$list/shipped"
 fi
-if [ -z "$matched" ]; then
+if [ ! -s "$list/shipped" ]; then
   echo "No shipped files changed."
   exit 0
 fi
@@ -29,6 +51,7 @@ if awk '/^@@/ { hunk = 1; next } hunk && /^\+/ && substr($0, 2) ~ /[^[:space:]]/
   exit 0
 fi
 
-printf 'Shipped files changed:\n%s\n' "$matched"
+echo "Shipped files changed:"
+tr '\0' '\n' <"$list/shipped"
 echo "::error file=CHANGELOG.md::This pull request changes shipped files but adds no line to CHANGELOG.md. Add one under ${HEADING}, or apply the skip-changelog label if users will not notice the change."
 exit 1
