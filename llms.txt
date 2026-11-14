@@ -7,11 +7,11 @@ This file indexes yungSNAT's GitHub repositories. Where a repository has its own
 ## Tools
 
 - [Puritanical](https://github.com/yungSNAT/Puritanical): a skill for Claude Code, Codex and other coding agents that asks for the smallest correct change, verified. Forked from Ponytail.
-- [Laconic](https://github.com/yungSNAT/Laconic): concise, answer-first output and an AI-text humaniser in correct Australian English, for coding agents.
-- [GhostSoap](https://github.com/yungSNAT/GhostSoap): prepares Australian Privacy Act requests to data brokers from a sourced register, for you to send from your own mailbox. Reply tracking is planned.
-- [Alcuin](https://github.com/yungSNAT/Alcuin): asks ChatGPT, or the OpenAI or Azure OpenAI API, about your source files from a CLI or MCP server, and keeps each answer as a durable session.
-- [DiogenesLamp](https://github.com/yungSNAT/DiogenesLamp): shows Yupoo catalogues on one searchable local page, covers and metadata only.
-- [ShaphansAudit](https://github.com/yungSNAT/ShaphansAudit): reports where a coding agent's tokens and checks are wasted, from the transcripts Claude Code and Codex save on your machine. It never prints message text and makes no network calls.
+- [Laconic](https://github.com/yungSNAT/Laconic): concise, answer-first output and an AI-text humaniser in correct Australian English, for coding agents. Try `npx skills add yungSNAT/laconic --global --agent '*' --yes`.
+- [GhostSoap](https://github.com/yungSNAT/GhostSoap): prepares Australian Privacy Act requests to data brokers from a sourced register, for you to send from your own mailbox. Reply tracking is planned. Try `ghostsoap plan --pack start-here` ([install](https://github.com/yungSNAT/GhostSoap#install)).
+- [Alcuin](https://github.com/yungSNAT/Alcuin): asks ChatGPT, or the OpenAI or Azure OpenAI API, about your source files from a CLI or MCP server, and keeps each answer as a durable session. Try `alcuin --dry-run summary --files-report -p "Review this module" --file src/lib.rs` ([install](https://github.com/yungSNAT/Alcuin#install)).
+- [DiogenesLamp](https://github.com/yungSNAT/DiogenesLamp): shows Yupoo catalogues on one searchable local page, covers and metadata only. Try `lamp demo` ([install](https://github.com/yungSNAT/DiogenesLamp#install)).
+- [ShaphansAudit](https://github.com/yungSNAT/ShaphansAudit): reports where a coding agent's tokens and checks are wasted, from the transcripts Claude Code and Codex save on your machine. It never prints message text and makes no network calls. Try `shaphan all` ([install](https://github.com/yungSNAT/ShaphansAudit#install)).
 
 ## Forks
 
