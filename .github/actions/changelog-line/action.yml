@@ -1,0 +1,35 @@
+name: changelog-line
+description: >-
+  Fail a pull request that changes shipped files without adding a line to
+  CHANGELOG.md. Check out with fetch-depth 0 first.
+inputs:
+  shipped:
+    description: Extended regular expression for the paths a release ships.
+    required: true
+  exclude:
+    description: Optional extended regular expression for shipped paths that need no line, such as tests.
+    required: false
+    default: ''
+  heading:
+    description: The CHANGELOG.md section the error tells contributors to use, such as '## [Unreleased]'.
+    required: true
+  base:
+    description: Base commit. Defaults to the pull request's base.
+    required: false
+    default: ${{ github.event.pull_request.base.sha }}
+  head:
+    description: Head commit. Defaults to the pull request's head.
+    required: false
+    default: ${{ github.event.pull_request.head.sha }}
+runs:
+  using: composite
+  steps:
+    - name: Require a changelog line for shipped changes
+      shell: bash
+      env:
+        BASE: ${{ inputs.base }}
+        HEAD: ${{ inputs.head }}
+        SHIPPED: ${{ inputs.shipped }}
+        EXCLUDE: ${{ inputs.exclude }}
+        HEADING: ${{ inputs.heading }}
+      run: bash "$GITHUB_ACTION_PATH/check.sh"

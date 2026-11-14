@@ -1,0 +1,52 @@
+name: changelog-line
+
+# Tests the changelog-line action on every change to it.
+on:
+  pull_request:
+    paths:
+      - .github/actions/changelog-line/**
+      - .github/workflows/changelog-line.yml
+  push:
+    branches: [main]
+    paths:
+      - .github/actions/changelog-line/**
+      - .github/workflows/changelog-line.yml
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Run the script's tests
+        run: bash .github/actions/changelog-line/test.sh
+      # The action itself, through action.yml: the last commit changes no path
+      # under no-such-dir/, so it must pass.
+      - name: Run the action with nothing shipped
+        uses: ./.github/actions/changelog-line
+        with:
+          shipped: ^no-such-dir/
+          heading: '## Unreleased'
+          base: ${{ github.sha }}~1
+          head: ${{ github.sha }}
+      # The same commits with every path shipped: this repository has no
+      # CHANGELOG.md, so it must fail. The step above proves the diff itself runs.
+      - name: Run the action with everything shipped
+        id: everything
+        continue-on-error: true
+        uses: ./.github/actions/changelog-line
+        with:
+          shipped: .
+          heading: '## Unreleased'
+          base: ${{ github.sha }}~1
+          head: ${{ github.sha }}
+      - name: Expect the action to have failed
+        env:
+          OUTCOME: ${{ steps.everything.outcome }}
+        run: test "$OUTCOME" = failure
