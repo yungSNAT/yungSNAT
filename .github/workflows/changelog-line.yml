@@ -1,0 +1,60 @@
+name: changelog-line
+
+# Tests the changelog-line action on every change to it.
+on:
+  pull_request:
+    paths:
+      - .github/actions/changelog-line/**
+      - .github/workflows/changelog-line.yml
+  push:
+    branches: [main]
+    paths:
+      - .github/actions/changelog-line/**
+      - .github/workflows/changelog-line.yml
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Run the script's tests
+        run: bash .github/actions/changelog-line/test.sh
+      # The action itself, through action.yml, over github.sha's first parent
+      # and github.sha (on a pull request, the base tip and the merge). test.sh
+      # covers the exit statuses; these steps prove the wiring.
+      - name: Run the action with nothing shipped
+        uses: ./.github/actions/changelog-line
+        with:
+          shipped: ^no-such-dir/
+          heading: '## Unreleased'
+          base: ${{ github.sha }}~1
+          head: ${{ github.sha }}
+      # Callers rely on the default base and head, which exist only on a pull request.
+      - name: Run the action with the default base and head
+        if: github.event_name == 'pull_request'
+        uses: ./.github/actions/changelog-line
+        with:
+          shipped: ^no-such-dir/
+          heading: '## Unreleased'
+      # This repository has no CHANGELOG.md, so with every path shipped the
+      # action must fail.
+      - name: Run the action with everything shipped
+        id: everything
+        continue-on-error: true
+        uses: ./.github/actions/changelog-line
+        with:
+          shipped: .
+          heading: '## Unreleased'
+          base: ${{ github.sha }}~1
+          head: ${{ github.sha }}
+      - name: Expect the action to have failed
+        env:
+          OUTCOME: ${{ steps.everything.outcome }}
+        run: test "$OUTCOME" = failure
