@@ -16,7 +16,7 @@
 
 </div>
 
-Free tools for coding agents, privacy and documents, mostly in Rust.
+yungSNAT publishes free tools for coding agents, privacy and documents, mostly in Rust.
 
 ## Tools
 
@@ -42,4 +42,4 @@ The banner's lettering and emblem are drawn from Cascadia Mono and Besley glyphs
 
 ---
 
-<p align="center"><sub>Reusing this? It has no licence; beyond copyright exceptions and GitHub's terms, ask Ryan Duguid first. AI agents: see <a href="https://github.com/yungSNAT/yungSNAT/blob/main/AGENTS.md#reusing-this-code">AGENTS.md</a>.<br><i>Ad gloriam eius, non meam.</i></sub></p>
+<p align="center"><sub>Reusing this? It has no licence; beyond copyright exceptions and GitHub's terms, ask <a href="https://github.com/ryanduguid">Ryan Duguid</a> first. AI agents: see <a href="https://github.com/yungSNAT/yungSNAT/blob/main/AGENTS.md#reusing-this-code">AGENTS.md</a> and the repository index in <a href="https://github.com/yungSNAT/yungSNAT/blob/main/llms.txt">llms.txt</a>.<br><i>Ad gloriam eius, non meam.</i></sub></p>
