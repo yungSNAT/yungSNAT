@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="140" viewBox="0 0 400 140" role="img" aria-labelledby="t">
+  <title id="t">Alcuin: Ask ChatGPT about your code; keep every answer.</title>
+  <defs>
+    <linearGradient id="g" x1="0" x2="0" y1="47" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFF0"/>
+      <stop offset="1" stop-color="#E5E4E2"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="140" rx="14" fill="#000000"/>
+  <rect x="8" y="8" width="384" height="124" rx="10" fill="none" stroke="#66023C" stroke-width="2"/>
+  <g font-family="'Cascadia Mono', 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="44" font-weight="700">
+    <text x="33" y="83" fill="#745EB1" textLength="158.4" lengthAdjust="spacingAndGlyphs">Alcuin</text>
+    <text x="30" y="80" fill="url(#g)" textLength="158.4" lengthAdjust="spacingAndGlyphs">Alcuin</text>
+  </g>
+  <path d="M30 104H120" stroke="#745EB1" stroke-width="3"/>
+</svg>
