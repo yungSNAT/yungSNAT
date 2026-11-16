@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="204" viewBox="0 0 400 204" role="img" aria-labelledby="t">
+  <title id="t">GhostSoap: Privacy Act requests to data brokers, sent by you.</title>
+  <defs>
+    <linearGradient id="g" x1="0" x2="0" y1="55" y2="84" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFF0"/>
+      <stop offset="1" stop-color="#E5E4E2"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="204" rx="14" fill="#000000"/>
+  <path d="M185 16H382A10 10 0 0 1 392 26V186A10 10 0 0 1 382 196H18A10 10 0 0 1 8 186V26A10 10 0 0 1 18 16H24" fill="none" stroke="#66023C" stroke-width="2"/>
+  <path d="M24 9V23M185 9V23" stroke="#990024" stroke-width="2"/>
+  <text x="32" y="20.5" font-family="'Cascadia Mono', 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="13" fill="#E5E4E2">yungSNAT/GhostSoap</text>
+  <g font-family="'Cascadia Mono', 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="40" font-weight="700">
+    <text x="33" y="87" fill="#745EB1" textLength="216" lengthAdjust="spacingAndGlyphs">GhostSoap</text>
+    <text x="30" y="84" fill="url(#g)" textLength="216" lengthAdjust="spacingAndGlyphs">GhostSoap</text>
+  </g>
+  <path d="M30 104H120" stroke="#745EB1" stroke-width="2"/>
+  <path d="M30 123L38 128L30 133" fill="none" stroke="#745EB1" stroke-width="2"/>
+  <text font-family="Besley, Georgia, Cambria, 'DejaVu Serif', serif" font-size="19" fill="#E5E4E2">
+    <tspan x="48" y="134">Privacy Act requests to</tspan>
+    <tspan x="48" y="159">data brokers, sent by you.</tspan>
+  </text>
+</svg>

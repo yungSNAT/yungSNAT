@@ -20,12 +20,56 @@ yungSNAT publishes free tools for coding agents, privacy and documents, mostly i
 
 ## Tools
 
-- [Puritanical](https://github.com/yungSNAT/Puritanical): the smallest correct change, verified. A skill for Claude Code, Codex and other coding agents, from Ponytail. Try `npx --allow-git=root github:yungSNAT/Puritanical --dry-run`, then drop `--dry-run` to install.
-- [Laconic](https://github.com/yungSNAT/Laconic): answer-first output and an AI-text humaniser in Australian English, for coding agents. Try `npx skills add yungSNAT/laconic --global --agent "*" --yes`.
-- [GhostSoap](https://github.com/yungSNAT/GhostSoap): prepare Australian Privacy Act requests to data brokers, for you to send from your own mailbox. Try `ghostsoap plan --pack start-here` ([install](https://github.com/yungSNAT/GhostSoap#install)).
-- [Alcuin](https://github.com/yungSNAT/Alcuin): ask ChatGPT, or the OpenAI or Azure OpenAI API, about your source files from a CLI or MCP server, and keep each answer. Try `alcuin --dry-run summary --files-report -p "Review this module" --file src/lib.rs` ([install](https://github.com/yungSNAT/Alcuin#install)).
-- [DiogenesLamp](https://github.com/yungSNAT/DiogenesLamp): browse Yupoo catalogues on one searchable local page, covers and metadata only. Try `lamp demo` ([install](https://github.com/yungSNAT/DiogenesLamp#install)).
-- [ShaphansAudit](https://github.com/yungSNAT/ShaphansAudit): find where a coding agent's tokens go, from the transcripts Claude Code and Codex save on your machine. Try `shaphan all` ([install](https://github.com/yungSNAT/ShaphansAudit#install)).
+<table>
+<tr>
+<td width="50%" valign="top">
+
+<a href="https://github.com/yungSNAT/Puritanical"><picture><source media="(prefers-color-scheme: light)" srcset=".github/assets/cards/puritanical-light.svg"><img src=".github/assets/cards/puritanical.svg" width="100%" alt="Puritanical card: No accretions: the smallest correct change, verified."></picture></a>
+
+[Puritanical](https://github.com/yungSNAT/Puritanical): the smallest correct change, verified. A skill for Claude Code, Codex and other coding agents, from Ponytail. Try `npx --allow-git=root github:yungSNAT/Puritanical --dry-run`, then drop `--dry-run` to install.
+
+</td>
+<td width="50%" valign="top">
+
+<a href="https://github.com/yungSNAT/Laconic"><picture><source media="(prefers-color-scheme: light)" srcset=".github/assets/cards/laconic-light.svg"><img src=".github/assets/cards/laconic.svg" width="100%" alt="Laconic card: Answer first. Built to keep facts. Australian English."></picture></a>
+
+[Laconic](https://github.com/yungSNAT/Laconic): answer-first output and an AI-text humaniser in Australian English, for coding agents. Try `npx skills add yungSNAT/laconic --global --agent "*" --yes`.
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+<a href="https://github.com/yungSNAT/GhostSoap"><picture><source media="(prefers-color-scheme: light)" srcset=".github/assets/cards/ghostsoap-light.svg"><img src=".github/assets/cards/ghostsoap.svg" width="100%" alt="GhostSoap card: Privacy Act requests to data brokers, sent by you."></picture></a>
+
+[GhostSoap](https://github.com/yungSNAT/GhostSoap): prepare Australian Privacy Act requests to data brokers, for you to send from your own mailbox. Try `ghostsoap plan --pack start-here` ([install](https://github.com/yungSNAT/GhostSoap#install)).
+
+</td>
+<td width="50%" valign="top">
+
+<a href="https://github.com/yungSNAT/Alcuin"><picture><source media="(prefers-color-scheme: light)" srcset=".github/assets/cards/alcuin-light.svg"><img src=".github/assets/cards/alcuin.svg" width="100%" alt="Alcuin card: Ask ChatGPT about your code; keep every answer."></picture></a>
+
+[Alcuin](https://github.com/yungSNAT/Alcuin): ask ChatGPT, or the OpenAI or Azure OpenAI API, about your source files from a CLI or MCP server, and keep each answer. Try `alcuin --dry-run summary --files-report -p "Review this module" --file src/lib.rs` ([install](https://github.com/yungSNAT/Alcuin#install)).
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+<a href="https://github.com/yungSNAT/DiogenesLamp"><picture><source media="(prefers-color-scheme: light)" srcset=".github/assets/cards/diogeneslamp-light.svg"><img src=".github/assets/cards/diogeneslamp.svg" width="100%" alt="DiogenesLamp card: Every Yupoo catalogue on one searchable page."></picture></a>
+
+[DiogenesLamp](https://github.com/yungSNAT/DiogenesLamp): browse Yupoo catalogues on one searchable local page, covers and metadata only. Try `lamp demo` ([install](https://github.com/yungSNAT/DiogenesLamp#install)).
+
+</td>
+<td width="50%" valign="top">
+
+<a href="https://github.com/yungSNAT/ShaphansAudit"><picture><source media="(prefers-color-scheme: light)" srcset=".github/assets/cards/shaphansaudit-light.svg"><img src=".github/assets/cards/shaphansaudit.svg" width="100%" alt="ShaphansAudit card: Find where your coding agent's tokens go, from its own transcripts."></picture></a>
+
+[ShaphansAudit](https://github.com/yungSNAT/ShaphansAudit): find where a coding agent's tokens go, from the transcripts Claude Code and Codex save on your machine. Try `shaphan all` ([install](https://github.com/yungSNAT/ShaphansAudit#install)).
+
+</td>
+</tr>
+</table>
 
 ## Forks
 
