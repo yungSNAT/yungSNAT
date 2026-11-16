@@ -21,7 +21,7 @@ yungSNAT publishes free tools for coding agents, privacy and documents, mostly i
 ## Tools
 
 <p>
-<a href="https://github.com/yungSNAT/Puritanical"><picture><source media="(prefers-color-scheme: light)" srcset=".github/assets/cards/puritanical-light.svg"><img src=".github/assets/cards/puritanical.svg" width="49%" alt="Puritanical card: No accretions: the smallest correct change, verified."></picture></a>
+<a href="https://github.com/yungSNAT/Puritanical"><picture><source media="(max-width: 600px) and (prefers-color-scheme: light)" srcset=".github/assets/cards/puritanical-phone-light.svg"><source media="(max-width: 600px)" srcset=".github/assets/cards/puritanical-phone.svg"><source media="(prefers-color-scheme: light)" srcset=".github/assets/cards/puritanical-light.svg"><img src=".github/assets/cards/puritanical.svg" width="49%" alt="Puritanical card: No accretions: the smallest correct change, verified."></picture></a>
 <a href="https://github.com/yungSNAT/Laconic"><picture><source media="(prefers-color-scheme: light)" srcset=".github/assets/cards/laconic-light.svg"><img src=".github/assets/cards/laconic.svg" width="49%" alt="Laconic card: Answer first. Built to keep facts. Australian English."></picture></a>
 </p>
 
