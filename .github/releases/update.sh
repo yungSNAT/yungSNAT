@@ -51,7 +51,7 @@ sort -r "$work/rows" | while IFS=$'\t' read -r published tag url name; do
     exit 1
   fi
   # A backslash here is @tsv's escape for a tab or newline in the URL.
-  if [[ $url =~ [[:space:]\<\>\\] ]]; then
+  if [[ $url != "https://github.com/yungSNAT/$name/releases/"* || $url =~ [[:space:]\<\>\\] ]]; then
     echo "::error::$name's release URL is not a plain link: $url" >&2
     exit 1
   fi

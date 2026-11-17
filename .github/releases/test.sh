@@ -113,6 +113,10 @@ fixture New $'2026-11-14T02:43:49Z\tv1\thttps://github.com/yungSNAT/New/releases
 readme $'<!-- releases:end -->\nAfter.'
 expect 1 'a URL with a space fails'
 
+fixture New $'2026-11-14T02:43:49Z\tv1\thttps://example.com/yungSNAT/New/releases/tag/v1'
+readme $'<!-- releases:end -->\nAfter.'
+expect 1 "a URL outside the repository's releases fails"
+
 # jq's @tsv writes a tab or newline inside a field as \t or \n.
 fixture New '2026-11-14T02:43:49Z	v1	https://github.com/yungSNAT/New/releases/tag/v1\nx'
 readme $'<!-- releases:end -->\nAfter.'
