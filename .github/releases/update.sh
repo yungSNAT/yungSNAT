@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# Rewrites the list between the release markers in a README: the latest
+# published release of each repository the README lists as
+# '- [Name](https://github.com/yungSNAT/Name)', newest first, dated.
+# A listed repository with no published release is named on stderr and left
+# out; any other API failure stops the script before the README is written.
+# Shell, not Rust: the profile's only other code is shell, and the workflow
+# runs this with no build step. Needs an authenticated gh and GNU date.
+set -euo pipefail
+export LC_ALL=C
+
+readme=${1:?usage: update.sh README.md}
+start='<!-- releases:start -->'
+end='<!-- releases:end -->'
+
+# Exactly one start marker, then exactly one end marker.
+if ! awk -v s="$start" -v e="$end" '
+  $0 == s { ns++; if (ne) bad = 1 }
+  $0 == e { ne++ }
+  END { exit !(ns == 1 && ne == 1 && !bad) }' "$readme"; then
+  echo "::error::$readme needs one '$start' line followed by one '$end' line." >&2
+  exit 2
+fi
+
+repos=$(sed -nE 's#^- \[([A-Za-z0-9._-]+)\]\(https://github\.com/yungSNAT/\1\).*#\1#p' "$readme" | awk '!seen[$0]++')
+if [ -z "$repos" ]; then
+  echo "::error::$readme lists no yungSNAT repository." >&2
+  exit 2
+fi
+
+work=$(mktemp -d)
+trap 'rm -rf "$work"' EXIT
+
+while read -r name; do
+  if out=$(gh api "repos/yungSNAT/$name/releases/latest" --jq '[.published_at, .tag_name, .html_url] | @tsv' 2>"$work/err"); then
+    printf '%s\t%s\n' "$out" "$name" >>"$work/rows"
+  elif grep -qF '(HTTP 404)' "$work/err" && gh api "repos/yungSNAT/$name" --jq .id >/dev/null; then
+    echo "$name: no published release" >&2
+  else
+    cat "$work/err" >&2
+    echo "::error::Could not read $name's latest release." >&2
+    exit 1
+  fi
+done <<<"$repos"
+
+touch "$work/rows"
+sort -r "$work/rows" | while IFS=$'\t' read -r published tag url name; do
+  # read merges adjacent tabs, so an empty field leaves the last one empty.
+  if [ -z "$published" ] || [ -z "$tag" ] || [ -z "$url" ] || [ -z "$name" ]; then
+    echo "::error::A latest release lacks a date, tag or URL: $published $tag $url $name" >&2
+    exit 1
+  fi
+  printf -- '- %s: [%s %s](%s)\n' "$(date -u -d "$published" '+%-d %b %Y')" "$name" "$tag" "$url"
+done >"$work/list"
+
+awk -v s="$start" -v e="$end" -v list="$work/list" '
+  $0 == s { print; while ((getline line < list) > 0) print line; skip = 1; next }
+  $0 == e { skip = 0 }
+  !skip' "$readme" >"$work/readme"
+cat "$work/readme" >"$readme"
