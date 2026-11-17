@@ -61,9 +61,10 @@ want_list='<!-- releases:start -->
 After.'
 
 # expect: runs update.sh on README.md and compares its exit status; with a
-# third argument, also the README from the start marker on.
+# third argument, also the README from the start marker on. Leaves the
+# script's output in $out.
 expect() {
-  local want=$1 name=$2 got=0 out
+  local want=$1 name=$2 got=0
   out=$(bash "$update" "$work/README.md" 2>&1) || got=$?
   if [ "$got" -ne "$want" ]; then
     echo "FAIL $name: exit $got, want $want"
@@ -80,6 +81,7 @@ expect() {
 
 readme $'<!-- releases:end -->\nAfter.'
 expect 0 'newest first, unreleased and duplicate and foreign links left out' "$want_list"
+[[ $out == *'Unreleased: no published release'* ]] || { echo 'FAIL the unreleased repository is not named'; failures=$((failures + 1)); }
 expect 0 'a second run changes nothing' "$want_list"
 
 fixture Unreleased 500
@@ -97,6 +99,25 @@ fixture Unreleased 404
 fixture New $'2026-11-14T02:43:49Z\t\thttps://github.com/yungSNAT/New/releases/tag/x'
 readme $'<!-- releases:end -->\nAfter.'
 expect 1 'a release with no tag fails'
+fixture New $'2026-11-14T02:43:49Z\tv1.2.0-1\thttps://github.com/yungSNAT/New/releases/tag/v1.2.0-1'
+
+fixture New $'2026-11-14T02:43:49Z\tv1]*_x\thttps://github.com/yungSNAT/New/releases/tag/v1(a)'
+readme $'<!-- releases:end -->\nAfter.'
+expect 0 'Markdown in a tag stays literal and a URL keeps its parentheses' '<!-- releases:start -->
+- 14 Nov 2026: [New v1\]\*\_x](https://github.com/yungSNAT/New/releases/tag/v1%28a%29)
+- 12 Nov 2026: [Old v0.1.0](https://github.com/yungSNAT/Old/releases/tag/v0.1.0)
+<!-- releases:end -->
+After.'
+
+fixture New $'2026-11-14T02:43:49Z\tv1\thttps://github.com/yungSNAT/New/releases/tag/v1 x'
+readme $'<!-- releases:end -->\nAfter.'
+expect 1 'a URL with a space fails'
+
+fixture New $'not-a-date\tv1.2.0-1\thttps://github.com/yungSNAT/New/releases/tag/v1.2.0-1'
+readme $'<!-- releases:end -->\nAfter.'
+before=$(cat "$work/README.md")
+expect 1 'a release date that does not parse fails'
+[ "$(cat "$work/README.md")" = "$before" ] || { echo 'FAIL a bad date left the README changed'; failures=$((failures + 1)); }
 fixture New $'2026-11-14T02:43:49Z\tv1.2.0-1\thttps://github.com/yungSNAT/New/releases/tag/v1.2.0-1'
 
 readme 'After.'
