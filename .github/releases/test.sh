@@ -60,15 +60,20 @@ want_list='<!-- releases:start -->
 <!-- releases:end -->
 After.'
 
-# expect: runs update.sh on README.md and compares its exit status; with a
-# third argument, also the README from the start marker on. Leaves the
-# script's output in $out.
+# expect: runs update.sh on README.md and compares its exit status; a
+# failure must leave the README unchanged. With a third argument, also
+# compares the README from the start marker on. Leaves the script's output
+# in $out.
 expect() {
   local want=$1 name=$2 got=0
+  cp "$work/README.md" "$work/before"
   out=$(bash "$update" "$work/README.md" 2>&1) || got=$?
   if [ "$got" -ne "$want" ]; then
     echo "FAIL $name: exit $got, want $want"
     printf '%s\n' "$out" | sed 's/^/     /'
+    failures=$((failures + 1))
+  elif [ "$want" -ne 0 ] && ! cmp -s "$work/README.md" "$work/before"; then
+    echo "FAIL $name: the README changed"
     failures=$((failures + 1))
   elif [ $# -ge 3 ] && [ "$(sed -n '/^<!-- releases:start -->$/,$p' "$work/README.md")" != "$3" ]; then
     echo "FAIL $name: README differs"
@@ -86,9 +91,7 @@ expect 0 'a second run changes nothing' "$want_list"
 
 fixture Unreleased 500
 readme $'<!-- releases:end -->\nAfter.'
-cp "$work/README.md" "$work/before"
 expect 1 'an API failure fails'
-cmp -s "$work/README.md" "$work/before" || { echo 'FAIL an API failure left the README changed'; failures=$((failures + 1)); }
 fixture Unreleased 404
 
 rm "$FIXTURES/Unreleased"
@@ -120,15 +123,11 @@ expect 1 "a URL outside the repository's releases fails"
 # jq's @tsv writes a tab or newline inside a field as \t or \n.
 fixture New '2026-11-14T02:43:49Z	v1	https://github.com/yungSNAT/New/releases/tag/v1\nx'
 readme $'<!-- releases:end -->\nAfter.'
-cp "$work/README.md" "$work/before"
 expect 1 'a URL with an escaped newline fails'
-cmp -s "$work/README.md" "$work/before" || { echo 'FAIL an escaped newline left the README changed'; failures=$((failures + 1)); }
 
 fixture New $'not-a-date\tv1.2.0-1\thttps://github.com/yungSNAT/New/releases/tag/v1.2.0-1'
 readme $'<!-- releases:end -->\nAfter.'
-cp "$work/README.md" "$work/before"
 expect 1 'a release date that does not parse fails'
-cmp -s "$work/README.md" "$work/before" || { echo 'FAIL a bad date left the README changed'; failures=$((failures + 1)); }
 fixture New $'2026-11-14T02:43:49Z\tv1.2.0-1\thttps://github.com/yungSNAT/New/releases/tag/v1.2.0-1'
 
 readme 'After.'
