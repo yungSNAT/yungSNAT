@@ -116,7 +116,9 @@ expect 1 'a URL with a space fails'
 # jq's @tsv writes a tab or newline inside a field as \t or \n.
 fixture New '2026-11-14T02:43:49Z	v1	https://github.com/yungSNAT/New/releases/tag/v1\nx'
 readme $'<!-- releases:end -->\nAfter.'
+cp "$work/README.md" "$work/before"
 expect 1 'a URL with an escaped newline fails'
+cmp -s "$work/README.md" "$work/before" || { echo 'FAIL an escaped newline left the README changed'; failures=$((failures + 1)); }
 
 fixture New $'not-a-date\tv1.2.0-1\thttps://github.com/yungSNAT/New/releases/tag/v1.2.0-1'
 readme $'<!-- releases:end -->\nAfter.'
