@@ -1,0 +1,66 @@
+name: releases
+
+# Keeps the README's 'Latest releases' list current: daily, on demand, and as a
+# test on every change to the script or this file.
+on:
+  schedule:
+    - cron: '17 21 * * *'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/releases/**
+      - .github/workflows/releases.yml
+
+permissions:
+  contents: read
+
+concurrency: releases
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Run the script's tests
+        run: bash .github/releases/test.sh
+      - name: Build the list from the live API
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          bash .github/releases/update.sh README.md
+          git diff -- README.md
+
+  update:
+    needs: test
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build the list
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash .github/releases/update.sh README.md
+      # The contents API commits as GitHub Actions with a verified signature,
+      # and refuses the write if README.md changed since the checkout.
+      - name: Commit a changed list
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- README.md; then
+            echo 'The list is current.'
+            exit 0
+          fi
+          gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/README.md" \
+            -f message='Update the release list' \
+            -f content="$(base64 -w0 README.md)" \
+            -f sha="$(git rev-parse HEAD:README.md)" \
+            -f branch="$GITHUB_REF_NAME" \
+            --jq .commit.html_url

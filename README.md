@@ -12,7 +12,7 @@
 [![Latest PlutarchPages release](https://badgen.net/github/release/yungSNAT/PlutarchPages/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/PlutarchPages/releases/latest)
 
 
-[Tools](#tools) · [Forks](#forks)
+[Tools](#tools) · [Forks](#forks) · [Releases](#latest-releases)
 
 </div>
 
@@ -54,6 +54,21 @@ yungSNAT publishes free tools for coding agents, privacy and documents, mostly i
 - [PamweChete](https://github.com/yungSNAT/PamweChete): a pi coding-agent configuration to copy piece by piece (archived).
 
 Fixes the forks offer upstream are listed in [FORKS.md](https://github.com/yungSNAT/yungSNAT/blob/main/FORKS.md).
+
+## Latest releases
+
+Each repository's latest release, newest first. [A daily workflow](https://github.com/yungSNAT/yungSNAT/blob/main/.github/workflows/releases.yml) updates this list from GitHub.
+
+<!-- releases:start -->
+- 14 Nov 2026: [PlutarchPages v0.18.2](https://github.com/yungSNAT/PlutarchPages/releases/tag/v0.18.2)
+- 14 Nov 2026: [ShaphansAudit v0.1.0](https://github.com/yungSNAT/ShaphansAudit/releases/tag/v0.1.0)
+- 13 Nov 2026: [DiogenesLamp v0.1.2](https://github.com/yungSNAT/DiogenesLamp/releases/tag/v0.1.2)
+- 13 Nov 2026: [Laconic laconic-check-v0.5.0](https://github.com/yungSNAT/Laconic/releases/tag/laconic-check-v0.5.0)
+- 13 Nov 2026: [PascalsLetter fork-v1.2.0-1](https://github.com/yungSNAT/PascalsLetter/releases/tag/fork-v1.2.0-1)
+- 13 Nov 2026: [ApollinaireASCII v0.4.1](https://github.com/yungSNAT/ApollinaireASCII/releases/tag/v0.4.1)
+- 13 Nov 2026: [Puritanical v1.0.1](https://github.com/yungSNAT/Puritanical/releases/tag/v1.0.1)
+- 12 Nov 2026: [Alcuin v0.1.0](https://github.com/yungSNAT/Alcuin/releases/tag/v0.1.0)
+<!-- releases:end -->
 
 The banner's lettering and emblem are drawn from Cascadia Mono and Besley glyphs (SIL OFL 1.1).
 
