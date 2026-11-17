@@ -50,14 +50,17 @@ sort -r "$work/rows" | while IFS=$'\t' read -r published tag url name; do
     echo "::error::A latest release lacks a date, tag or URL: $published $tag $url $name" >&2
     exit 1
   fi
-  if [[ $url =~ [[:space:]\<\>] ]]; then
+  # A backslash here is @tsv's escape for a tab or newline in the URL.
+  if [[ $url =~ [[:space:]\<\>\\] ]]; then
     echo "::error::$name's release URL is not a plain link: $url" >&2
     exit 1
   fi
   # An assignment, so a date that does not parse stops the script.
   day=$(date -u -d "$published" '+%-d %b %Y')
-  # Backslash-escape Markdown in the link text; encode parentheses in the URL.
-  label=$(printf '%s %s' "$name" "$tag" | sed 's/[][\\`*_~<>]/\\&/g')
+  # Backslash-escape Markdown and entities in the link text; percent-encode
+  # parentheses and ampersands in the URL.
+  label=$(printf '%s %s' "$name" "$tag" | sed 's/[][\\`*_~<>&]/\\&/g')
+  url=${url//&/%26}
   url=${url//(/%28}
   printf -- '- %s: [%s](%s)\n' "$day" "$label" "${url//)/%29}"
 done >"$work/list"

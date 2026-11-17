@@ -86,9 +86,9 @@ expect 0 'a second run changes nothing' "$want_list"
 
 fixture Unreleased 500
 readme $'<!-- releases:end -->\nAfter.'
-before=$(cat "$work/README.md")
+cp "$work/README.md" "$work/before"
 expect 1 'an API failure fails'
-[ "$(cat "$work/README.md")" = "$before" ] || { echo 'FAIL an API failure left the README changed'; failures=$((failures + 1)); }
+cmp -s "$work/README.md" "$work/before" || { echo 'FAIL an API failure left the README changed'; failures=$((failures + 1)); }
 fixture Unreleased 404
 
 rm "$FIXTURES/Unreleased"
@@ -101,10 +101,10 @@ readme $'<!-- releases:end -->\nAfter.'
 expect 1 'a release with no tag fails'
 fixture New $'2026-11-14T02:43:49Z\tv1.2.0-1\thttps://github.com/yungSNAT/New/releases/tag/v1.2.0-1'
 
-fixture New $'2026-11-14T02:43:49Z\tv1]*_x\thttps://github.com/yungSNAT/New/releases/tag/v1(a)'
+fixture New $'2026-11-14T02:43:49Z\tv1]*_&amp;x\thttps://github.com/yungSNAT/New/releases/tag/v1(a)&amp;'
 readme $'<!-- releases:end -->\nAfter.'
-expect 0 'Markdown in a tag stays literal and a URL keeps its parentheses' '<!-- releases:start -->
-- 14 Nov 2026: [New v1\]\*\_x](https://github.com/yungSNAT/New/releases/tag/v1%28a%29)
+expect 0 'Markdown and entities in a tag stay literal and a URL keeps its destination' '<!-- releases:start -->
+- 14 Nov 2026: [New v1\]\*\_\&amp;x](https://github.com/yungSNAT/New/releases/tag/v1%28a%29%26amp;)
 - 12 Nov 2026: [Old v0.1.0](https://github.com/yungSNAT/Old/releases/tag/v0.1.0)
 <!-- releases:end -->
 After.'
@@ -113,11 +113,16 @@ fixture New $'2026-11-14T02:43:49Z\tv1\thttps://github.com/yungSNAT/New/releases
 readme $'<!-- releases:end -->\nAfter.'
 expect 1 'a URL with a space fails'
 
+# jq's @tsv writes a tab or newline inside a field as \t or \n.
+fixture New '2026-11-14T02:43:49Z	v1	https://github.com/yungSNAT/New/releases/tag/v1\nx'
+readme $'<!-- releases:end -->\nAfter.'
+expect 1 'a URL with an escaped newline fails'
+
 fixture New $'not-a-date\tv1.2.0-1\thttps://github.com/yungSNAT/New/releases/tag/v1.2.0-1'
 readme $'<!-- releases:end -->\nAfter.'
-before=$(cat "$work/README.md")
+cp "$work/README.md" "$work/before"
 expect 1 'a release date that does not parse fails'
-[ "$(cat "$work/README.md")" = "$before" ] || { echo 'FAIL a bad date left the README changed'; failures=$((failures + 1)); }
+cmp -s "$work/README.md" "$work/before" || { echo 'FAIL a bad date left the README changed'; failures=$((failures + 1)); }
 fixture New $'2026-11-14T02:43:49Z\tv1.2.0-1\thttps://github.com/yungSNAT/New/releases/tag/v1.2.0-1'
 
 readme 'After.'
