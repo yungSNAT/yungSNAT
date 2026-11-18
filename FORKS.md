@@ -9,7 +9,6 @@ Open, merged and closed are different states. The Open contributions column list
 | Fork | Upstream | Open contributions |
 | --- | --- | --- |
 | [PascalsLetter](https://github.com/yungSNAT/PascalsLetter) | [rtk-ai/rtk](https://github.com/rtk-ai/rtk) | None |
-| [ryanduguid.github.io](https://github.com/yungSNAT/ryanduguid.github.io) | [ryanduguid/ryanduguid.github.io](https://github.com/ryanduguid/ryanduguid.github.io) | [#526](https://github.com/ryanduguid/ryanduguid.github.io/pull/526) |
 
 ## Recent contributions no longer open
 
