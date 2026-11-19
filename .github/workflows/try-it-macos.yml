@@ -1,0 +1,94 @@
+name: try-it-macos
+
+# Runs each tool's try-it line from the README on macOS, after the install its
+# README gives for macOS: the Rust tools from source, as none publishes a macOS
+# build yet, and the skills through npx. Each line must appear in the README as
+# written here. On demand, and as a test of every change to the README or this file.
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - README.md
+      - .github/workflows/try-it-macos.yml
+
+permissions:
+  contents: read
+
+jobs:
+  try:
+    name: try (${{ matrix.tool }})
+    runs-on: macos-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - tool: Puritanical
+            line: npx --allow-git=root github:yungSNAT/Puritanical --dry-run
+            # The line lists an install command per agent on PATH and exits 1 with
+            # none, so one agent goes on first.
+            try: |
+              npm install --global --no-fund --no-audit @anthropic-ai/claude-code
+              eval "$LINE"
+          - tool: Laconic
+            line: npx skills add yungSNAT/laconic --global --agent "*" --yes
+            try: |
+              eval "$LINE"
+              test -f "$HOME/.agents/skills/laconic/SKILL.md"
+          - tool: GhostSoap
+            source: true
+            line: ghostsoap plan --pack start-here
+            try: |
+              c=0; eval "$LINE" > plan.txt || c=$?; head -n 6 plan.txt
+              echo "lines: $(wc -l < plan.txt)"; exit "$c"
+          - tool: Alcuin
+            source: true
+            line: alcuin --dry-run summary --files-report -p "Review this module" --file src/lib.rs
+            try: |
+              mkdir -p src && printf 'pub fn add(a: i32, b: i32) -> i32 {\n    a + b\n}\n' > src/lib.rs
+              eval "$LINE"
+          - tool: DiogenesLamp
+            source: true
+            line: lamp demo
+            # A server: pass when it says where it serves and that page answers.
+            try: |
+              eval "$LINE" > lamp.log 2>&1 & pid=$!
+              for _ in $(seq 60); do grep -q 'serving on' lamp.log && break; sleep 1; done
+              cat lamp.log
+              url=$(grep -o 'http://127\.0\.0\.1:[0-9]*/' lamp.log | head -n 1)
+              c=0; curl -fsS -o /dev/null -w 'GET / %{http_code}\n' "$url" || c=$?
+              kill "$pid"; exit "$c"
+          - tool: BigSister
+            source: true
+            line: shaphan all
+            # With no transcripts, the documented result: exit 1, naming each missing folder.
+            try: |
+              c=0; eval "$LINE" > out.txt 2>&1 || c=$?; cat out.txt
+              [ "$c" -eq 1 ] && grep -qF 'not found: ~/.claude/projects' out.txt
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: README.md
+          sparse-checkout-cone-mode: false
+      - name: Check the line is the README's
+        env:
+          LINE: ${{ matrix.line }}
+        run: grep -Fq "Try \`$LINE\`" README.md
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '26'
+      - name: Install from source
+        if: matrix.source
+        env:
+          TOOL: ${{ matrix.tool }}
+        run: |
+          git clone --depth 1 "https://github.com/yungSNAT/$TOOL" "$RUNNER_TEMP/$TOOL"
+          git -C "$RUNNER_TEMP/$TOOL" log -1 --format='%H %cI'
+          # From the clone, so its rust-toolchain.toml applies.
+          cd "$RUNNER_TEMP/$TOOL" && cargo install --locked --path .
+      - name: Run the try-it line
+        env:
+          LINE: ${{ matrix.line }}
+          TRY: ${{ matrix.try }}
+        run: bash -e -o pipefail -c "$TRY"
