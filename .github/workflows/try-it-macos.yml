@@ -63,7 +63,7 @@ jobs:
               exit "$c"
           - tool: BigSister
             source: true
-            line: shaphan all
+            line: bigsister all
             # With no transcripts, the documented result: exit 1, naming each missing folder.
             try: |
               c=0; eval "$LINE" > out.txt 2>&1 || c=$?; cat out.txt
