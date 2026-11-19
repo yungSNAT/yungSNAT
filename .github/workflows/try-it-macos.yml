@@ -52,7 +52,8 @@ jobs:
             line: lamp demo
             # A server: pass when it says where it serves and that page answers.
             try: |
-              eval "$LINE" > lamp.log 2>&1 & pid=$!
+              # exec, so the background process is lamp itself and the kill reaches it.
+              eval "exec $LINE" > lamp.log 2>&1 & pid=$!
               for _ in $(seq 60); do grep -q 'serving on' lamp.log && break; sleep 1; done
               cat lamp.log
               url=$(grep -o 'http://127\.0\.0\.1:[0-9]*/' lamp.log | head -n 1)
