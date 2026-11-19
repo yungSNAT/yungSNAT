@@ -52,15 +52,18 @@ jobs:
             line: lamp demo
             # A server: pass when it says where it serves and that page answers.
             try: |
-              eval "$LINE" > lamp.log 2>&1 & pid=$!
+              # exec, so the background process is lamp itself and the kill reaches it.
+              eval "exec $LINE" > lamp.log 2>&1 & pid=$!
               for _ in $(seq 60); do grep -q 'serving on' lamp.log && break; sleep 1; done
               cat lamp.log
               url=$(grep -o 'http://127\.0\.0\.1:[0-9]*/' lamp.log | head -n 1)
               c=0; curl -fsS -o /dev/null -w 'GET / %{http_code}\n' "$url" || c=$?
-              kill "$pid"; exit "$c"
+              kill "$pid"; sleep 2
+              if pgrep -x lamp > /dev/null; then echo 'lamp still runs after kill'; exit 1; fi
+              exit "$c"
           - tool: BigSister
             source: true
-            line: shaphan all
+            line: bigsister all
             # With no transcripts, the documented result: exit 1, naming each missing folder.
             try: |
               c=0; eval "$LINE" > out.txt 2>&1 || c=$?; cat out.txt
