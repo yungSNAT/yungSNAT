@@ -61,7 +61,7 @@ Each repository's latest release, newest first. [A daily workflow](https://githu
 
 <!-- releases:start -->
 - 14 Nov 2026: [PlutarchPages v0.18.2](https://github.com/yungSNAT/PlutarchPages/releases/tag/v0.18.2)
-- 14 Nov 2026: [ShaphansAudit v0.1.0](https://github.com/yungSNAT/ShaphansAudit/releases/tag/v0.1.0)
+- 14 Nov 2026: [BigSister v0.1.0](https://github.com/yungSNAT/BigSister/releases/tag/v0.1.0)
 - 13 Nov 2026: [DiogenesLamp v0.1.2](https://github.com/yungSNAT/DiogenesLamp/releases/tag/v0.1.2)
 - 13 Nov 2026: [Laconic laconic-check-v0.5.0](https://github.com/yungSNAT/Laconic/releases/tag/laconic-check-v0.5.0)
 - 13 Nov 2026: [PascalsLetter fork-v1.2.0-1](https://github.com/yungSNAT/PascalsLetter/releases/tag/fork-v1.2.0-1)
