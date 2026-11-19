@@ -57,7 +57,9 @@ jobs:
               cat lamp.log
               url=$(grep -o 'http://127\.0\.0\.1:[0-9]*/' lamp.log | head -n 1)
               c=0; curl -fsS -o /dev/null -w 'GET / %{http_code}\n' "$url" || c=$?
-              kill "$pid"; exit "$c"
+              kill "$pid"; sleep 2
+              if pgrep -x lamp > /dev/null; then echo 'lamp still runs after kill'; exit 1; fi
+              exit "$c"
           - tool: BigSister
             source: true
             line: shaphan all
