@@ -2,7 +2,7 @@ name: try-it-macos
 
 # Runs each tool's try-it line from the README on macOS, after the install its
 # README gives for macOS: the Rust tools from source, as none publishes a macOS
-# build yet, and the skills through npx. Each line must appear in the README as
+# build yet, and the skills through npx or a clone. Each line must appear in the README as
 # written here. On demand, and as a test of every change to the README or this file.
 on:
   workflow_dispatch:
@@ -24,12 +24,18 @@ jobs:
       matrix:
         include:
           - tool: Puritanical
-            line: npx --allow-git=root github:yungSNAT/Puritanical --dry-run
-            # The line lists an install command per agent on PATH and exits 1 with
-            # none, so one agent goes on first.
+            line: node bin/install.js --only codex --dry-run
+            # In a clone, as Puritanical's README installs it. The dry run names
+            # ~/.codex/AGENTS.md and writes nothing; the real run writes the clone's rules there.
             try: |
-              npm install --global --no-fund --no-audit @anthropic-ai/claude-code
-              eval "$LINE"
+              git clone --depth 1 https://github.com/yungSNAT/Puritanical "$RUNNER_TEMP/Puritanical"
+              cd "$RUNNER_TEMP/Puritanical" && git log -1 --format='%H %cI'
+              eval "$LINE" | tee dry.txt
+              grep -qF "would write chisle ruleset to $HOME/.codex/AGENTS.md" dry.txt
+              test ! -e "$HOME/.codex/AGENTS.md"
+              node bin/install.js --only codex
+              grep -qxF '<!-- chisle-begin -->' "$HOME/.codex/AGENTS.md"
+              grep -qxF "$(head -n 1 AGENTS.md)" "$HOME/.codex/AGENTS.md"
           - tool: Laconic
             line: npx skills add yungSNAT/laconic --global --agent "*" --yes
             try: |
