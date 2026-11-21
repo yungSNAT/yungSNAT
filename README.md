@@ -66,7 +66,6 @@ Each repository's latest release, newest first. [A daily workflow](https://githu
 - 13 Nov 2026: [Laconic laconic-check-v0.5.0](https://github.com/yungSNAT/Laconic/releases/tag/laconic-check-v0.5.0)
 - 13 Nov 2026: [PascalsLetter fork-v1.2.0-1](https://github.com/yungSNAT/PascalsLetter/releases/tag/fork-v1.2.0-1)
 - 13 Nov 2026: [ApollinaireASCII v0.4.1](https://github.com/yungSNAT/ApollinaireASCII/releases/tag/v0.4.1)
-- 13 Nov 2026: [Puritanical v1.0.1](https://github.com/yungSNAT/Puritanical/releases/tag/v1.0.1)
 - 12 Nov 2026: [Alcuin v0.1.0](https://github.com/yungSNAT/Alcuin/releases/tag/v0.1.0)
 <!-- releases:end -->
 
