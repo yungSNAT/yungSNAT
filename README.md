@@ -60,6 +60,7 @@ Fixes the forks offer upstream are listed in [FORKS.md](https://github.com/yungS
 Each repository's latest release, newest first. [A daily workflow](https://github.com/yungSNAT/yungSNAT/blob/main/.github/workflows/releases.yml) updates this list from GitHub.
 
 <!-- releases:start -->
+- 21 Nov 2026: [Puritanical v1.0.0](https://github.com/yungSNAT/Puritanical/releases/tag/v1.0.0)
 - 14 Nov 2026: [PlutarchPages v0.18.2](https://github.com/yungSNAT/PlutarchPages/releases/tag/v0.18.2)
 - 14 Nov 2026: [BigSister v0.1.0](https://github.com/yungSNAT/BigSister/releases/tag/v0.1.0)
 - 13 Nov 2026: [DiogenesLamp v0.1.2](https://github.com/yungSNAT/DiogenesLamp/releases/tag/v0.1.2)
