@@ -4,7 +4,8 @@
 # 2. Every relative link and image/srcset path in README.md exists on disk.
 # 3. llms.txt lists every active yungSNAT repository named in README.md.
 # Shell, not Rust: the profile's only other code is shell, and the workflow
-# runs this with no build step.
+# runs this with no build step. Requires bash, POSIX awk and realpath
+# (available on ubuntu-latest, macOS and Git Bash).
 set -euo pipefail
 export LC_ALL=C
 
@@ -96,9 +97,18 @@ done < <(awk '
         emit(kind, "")
         return
       }
-      if (match(tolower(s), /^data:[^, \t]*,[^, \t]*/)) {
+      if (match(tolower(s), /^data:[^ \t]*/)) {
         item = substr(s, 1, RLENGTH)
         s = substr(s, RLENGTH + 1)
+        if (substr(item, length(item), 1) == ",") {
+          sub(/,+$/, "", item)
+          emit(kind, item)
+          if (s ~ /^[ \t]*$/) {
+            emit(kind, "")
+            return
+          }
+          continue
+        }
         emit(kind, item)
         c = index(s, ",")
         if (c == 0) return

@@ -54,7 +54,7 @@ EOF
 }
 
 expect() {
-  local want=$1 name=$2 got=0 out
+  local want=$1 name=$2 got=0
   out=$(bash "$check" "$site" 2>&1) || got=$?
   if [ "$got" -ne "$want" ]; then
     echo "FAIL $name: exit $got, want $want"
@@ -141,6 +141,19 @@ expect 0 'data URI with comma in srcset passes'
 make_site srcset-data-uri-missing
 printf '\n<picture><source srcset="data:image/svg+xml;base64,PHN2Zy8+, .github/assets/missing.svg"><img src=".github/assets/banner.svg" alt="x"></picture>\n' >>"$site/README.md"
 expect 1 'data URI followed by missing relative path in srcset fails'
+
+make_site srcset-data-uri-multi-comma-ok
+printf '\n<picture><source srcset="data:text/plain,hello,world 1x, .github/assets/banner.svg 2x"><img src=".github/assets/banner.svg" alt="x"></picture>\n' >>"$site/README.md"
+expect 0 'multi-comma data URI with descriptor in srcset passes'
+
+make_site srcset-data-uri-multi-comma-missing
+printf '\n<picture><source srcset="data:text/plain,hello,world 1x, .github/assets/missing.svg 2x"><img src=".github/assets/banner.svg" alt="x"></picture>\n' >>"$site/README.md"
+expect 1 'multi-comma data URI followed by missing path in srcset fails'
+if [[ $out != *"missing image file '.github/assets/missing.svg'"* || $out == *"missing image file 'world'"* ]]; then
+  echo 'FAIL multi-comma data URI error did not isolate .github/assets/missing.svg'
+  printf '%s\n' "$out" | sed 's/^/     /'
+  failures=$((failures + 1))
+fi
 
 make_site empty-link
 printf '\n[Empty]()\n' >>"$site/README.md"
