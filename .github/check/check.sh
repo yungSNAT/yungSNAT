@@ -21,6 +21,9 @@ if [ ! -f "$llms" ]; then
   exit 2
 fi
 
+canon_root=$(realpath "$root")
+canon_root=${canon_root%/}
+
 failures=0
 fail() {
   echo "::error::$1" >&2
@@ -62,9 +65,15 @@ while IFS=$'\t' read -r kind lineno target; do
   if [ "$kind" = image ]; then
     if [ ! -f "$root/$rel" ]; then
       fail "README.md:$lineno: missing image file '$rel'."
+      continue
     fi
   elif [ ! -e "$root/$rel" ]; then
     fail "README.md:$lineno: missing relative link '$rel'."
+    continue
+  fi
+  resolved=$(realpath "$root/$rel" 2>/dev/null || true)
+  if [ -z "$resolved" ] || { [ "$resolved" != "$canon_root" ] && [[ "$resolved" != "$canon_root/"* ]]; }; then
+    fail "README.md:$lineno: $kind path resolves outside repository root: '$rel'."
   fi
 done < <(awk '
   function emit(kind, raw,    val) {
@@ -73,7 +82,52 @@ done < <(awk '
     sub(/[ \t]+$/, "", val)
     printf "%s\t%d\t%s\n", kind, NR, val
   }
-  function scan_attr(line, attr, kind,    rest, re, q, val, n, parts, i, j, item) {
+  function scan_srcset(val, kind,    s, item, c) {
+    s = val
+    sub(/^[ \t]+/, "", s)
+    sub(/[ \t]+$/, "", s)
+    if (s == "") {
+      emit(kind, "")
+      return
+    }
+    while (s != "") {
+      sub(/^[ \t]+/, "", s)
+      if (s == "") {
+        emit(kind, "")
+        return
+      }
+      if (match(tolower(s), /^data:[^, \t]*,[^, \t]*/)) {
+        item = substr(s, 1, RLENGTH)
+        s = substr(s, RLENGTH + 1)
+        emit(kind, item)
+        c = index(s, ",")
+        if (c == 0) return
+        s = substr(s, c + 1)
+        if (s ~ /^[ \t]*$/) {
+          emit(kind, "")
+          return
+        }
+        continue
+      }
+      c = index(s, ",")
+      if (c == 0) {
+        item = s
+        s = ""
+      } else {
+        item = substr(s, 1, c - 1)
+        s = substr(s, c + 1)
+        if (s ~ /^[ \t]*$/) {
+          sub(/[ \t].*$/, "", item)
+          emit(kind, item)
+          emit(kind, "")
+          return
+        }
+      }
+      sub(/[ \t].*$/, "", item)
+      emit(kind, item)
+    }
+  }
+  function scan_attr(line, attr, kind,    rest, re, q, val, i) {
     rest = line
     re = "(^|[^A-Za-z0-9_-])" attr "[ \t]*=[ \t]*[\042\047]"
     while (match(tolower(rest), re)) {
@@ -84,23 +138,27 @@ done < <(awk '
       val = substr(rest, 1, i - 1)
       rest = substr(rest, i + 1)
       if (attr == "srcset") {
-        sub(/^[ \t]+/, "", val)
-        sub(/[ \t]+$/, "", val)
-        if (val == "") {
-          emit(kind, "")
-        } else {
-          n = split(val, parts, ",")
-          for (j = 1; j <= n; j++) {
-            item = parts[j]
-            sub(/^[ \t]+/, "", item)
-            sub(/[ \t].*$/, "", item)
-            emit(kind, item)
-          }
-        }
+        scan_srcset(val, kind)
       } else {
         emit(kind, val)
       }
     }
+  }
+  function scan_ref_def(line,    rest, i) {
+    if (!match(line, /^[ ]?[ ]?[ ]?\[[^][]+\]:[ \t]*/)) return 0
+    rest = substr(line, RSTART + RLENGTH)
+    if (rest == "") {
+      emit("link", "")
+      return 1
+    }
+    if (substr(rest, 1, 1) == "<") {
+      i = index(rest, ">")
+      emit("link", i > 0 ? substr(rest, 2, i - 2) : "")
+      return 1
+    }
+    sub(/[ \t].*$/, "", rest)
+    emit("link", rest)
+    return 1
   }
   function scan_md(line,    rest, p, kind, target, ch, depth, i, len, prev) {
     rest = line
@@ -141,6 +199,7 @@ done < <(awk '
   /^[ \t]*(```|~~~)/ { in_fence = !in_fence; next }
   in_fence { next }
   {
+    if (scan_ref_def($0)) next
     line = $0
     gsub(/`[^`]*`/, "", line)
     scan_attr(line, "srcset", "image")

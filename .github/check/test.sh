@@ -104,6 +104,44 @@ make_site traversal-link
 printf '\n[Escape](../outside.md)\n' >>"$site/README.md"
 expect 1 'relative link escaping repository root fails'
 
+make_site symlink-outside-file
+printf 'outside\n' >"$work/outside.md"
+MSYS=winsymlinks:nativestrict ln -s "$work/outside.md" "$site/docs/outside.md"
+printf '\n[Outside](docs/outside.md)\n' >>"$site/README.md"
+expect 1 'symlink to file outside repository root fails'
+
+make_site symlink-outside-dir
+mkdir -p "$work/outside-dir"
+printf 'outside\n' >"$work/outside-dir/secret.md"
+MSYS=winsymlinks:nativestrict ln -s "$work/outside-dir" "$site/docs/ext"
+printf '\n[Secret](docs/ext/secret.md)\n' >>"$site/README.md"
+expect 1 'path through symlink directory outside repository root fails'
+
+make_site symlink-inside
+MSYS=winsymlinks:nativestrict ln -s notes.md "$site/docs/alias.md"
+printf '\n[Alias](docs/alias.md)\n' >>"$site/README.md"
+expect 0 'internal symlink inside repository root passes'
+
+make_site ref-link-valid
+printf '\n[notes-ref]: docs/notes.md "Notes"\n[ext-ref]: https://example.com\n' >>"$site/README.md"
+expect 0 'valid markdown reference link definitions pass'
+
+make_site ref-link-missing
+printf '\n[missing-ref]: docs/missing.md "Missing"\n' >>"$site/README.md"
+expect 1 'missing markdown reference link definition fails'
+
+make_site ref-link-angle-missing
+printf '\n[missing-angle]: <docs/missing.md> "Missing"\n' >>"$site/README.md"
+expect 1 'missing angle-bracketed markdown reference link fails'
+
+make_site srcset-data-uri
+printf '\n<picture><source srcset="data:image/svg+xml;base64,PHN2Zy8+ 1x, .github/assets/banner.svg 2x"><img src=".github/assets/banner.svg" alt="x"></picture>\n' >>"$site/README.md"
+expect 0 'data URI with comma in srcset passes'
+
+make_site srcset-data-uri-missing
+printf '\n<picture><source srcset="data:image/svg+xml;base64,PHN2Zy8+, .github/assets/missing.svg"><img src=".github/assets/banner.svg" alt="x"></picture>\n' >>"$site/README.md"
+expect 1 'data URI followed by missing relative path in srcset fails'
+
 make_site empty-link
 printf '\n[Empty]()\n' >>"$site/README.md"
 expect 1 'empty markdown link fails'
