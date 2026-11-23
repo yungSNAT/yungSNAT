@@ -9,9 +9,6 @@
 
 <div align="center">
 
-[![Latest PlutarchPages release](https://badgen.net/github/release/yungSNAT/PlutarchPages/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/PlutarchPages/releases/latest)
-
-
 [Tools](#tools) · [Forks](#forks) · [Releases](#latest-releases)
 
 </div>
