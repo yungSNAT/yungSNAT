@@ -14,6 +14,7 @@
 </div>
 
 yungSNAT publishes free tools for coding agents, privacy and documents, mostly in Rust.
+These are personal projects; professional projects are on [ryanduguid](https://github.com/ryanduguid).
 
 ## Tools
 
