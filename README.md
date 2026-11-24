@@ -40,7 +40,7 @@ These are personal projects; professional projects are on [ryanduguid](https://g
 </p>
 
 - [DiogenesLamp](https://github.com/yungSNAT/DiogenesLamp): browse Yupoo catalogues on one searchable local page, covers and metadata only. Try `lamp demo` ([install](https://github.com/yungSNAT/DiogenesLamp#install)). [![DiogenesLamp latest release](https://badgen.net/github/release/yungSNAT/DiogenesLamp/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/DiogenesLamp/releases/latest)
-- [BigSister](https://github.com/yungSNAT/BigSister): find where a coding agent's tokens go, from the transcripts Claude Code and Codex save on your machine. Try `bigsister all` ([install](https://github.com/yungSNAT/BigSister#install); v0.1.0, the latest release, names it `shaphan`). [![BigSister latest release](https://badgen.net/github/release/yungSNAT/BigSister/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/BigSister/releases/latest)
+- [BigSister](https://github.com/yungSNAT/BigSister): find where a coding agent's tokens go, from the transcripts Claude Code, Codex, pi, OpenCode, Gemini CLI and Qwen Code save on your machine. Try `bigsister all` ([install](https://github.com/yungSNAT/BigSister#install); v0.1.0, the latest release, names it `shaphan`). [![BigSister latest release](https://badgen.net/github/release/yungSNAT/BigSister/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/BigSister/releases/latest)
 
 ## Forks
 
