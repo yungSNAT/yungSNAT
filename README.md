@@ -24,14 +24,14 @@ These are personal projects; professional projects are on [ryanduguid](https://g
 </p>
 
 - [Puritanical](https://github.com/yungSNAT/Puritanical): the smallest correct change, verified. Rules for Codex and a plugin for Claude Code, from Chisle. Try `node bin/install.js --only codex --dry-run` in a clone ([install](https://github.com/yungSNAT/Puritanical#install)), then drop `--dry-run` to install. [![Puritanical latest release](https://badgen.net/github/release/yungSNAT/Puritanical/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/Puritanical/releases/latest)
-- [Laconic](https://github.com/yungSNAT/Laconic): answer-first output and an AI-text humaniser in Australian English, for coding agents. Try `npx skills add yungSNAT/laconic --global --agent "*" --yes`. [![Laconic latest release](https://badgen.net/github/release/yungSNAT/Laconic/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/Laconic/releases/latest)
+- [Laconic](https://github.com/yungSNAT/Laconic): answer-first output and an AI-text humaniser in Australian English, for coding agents. Try `npx skills add yungSNAT/laconic --global --agent "*" --yes`. Or [check text in your browser](https://yungsnat.github.io/Laconic/). [![Laconic latest release](https://badgen.net/github/release/yungSNAT/Laconic/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/Laconic/releases/latest)
 
 <p>
 <a href="https://github.com/yungSNAT/GhostSoap"><picture><source media="(max-width: 600px) and (prefers-color-scheme: light)" srcset=".github/assets/cards/ghostsoap-phone-light.svg"><source media="(max-width: 600px)" srcset=".github/assets/cards/ghostsoap-phone.svg"><source media="(prefers-color-scheme: light)" srcset=".github/assets/cards/ghostsoap-light.svg"><img src=".github/assets/cards/ghostsoap.svg" width="49%" alt="GhostSoap card: Privacy Act requests to data brokers, sent by you."></picture></a>
 <a href="https://github.com/yungSNAT/Alcuin"><picture><source media="(max-width: 600px) and (prefers-color-scheme: light)" srcset=".github/assets/cards/alcuin-phone-light.svg"><source media="(max-width: 600px)" srcset=".github/assets/cards/alcuin-phone.svg"><source media="(prefers-color-scheme: light)" srcset=".github/assets/cards/alcuin-light.svg"><img src=".github/assets/cards/alcuin.svg" width="49%" alt="Alcuin card: Ask ChatGPT about your code; keep every answer."></picture></a>
 </p>
 
-- [GhostSoap](https://github.com/yungSNAT/GhostSoap): prepare Australian Privacy Act requests to data brokers, for you to send from your own mailbox, and track deadlines and replies. Try `ghostsoap plan --pack start-here` ([install](https://github.com/yungSNAT/GhostSoap#install)).
+- [GhostSoap](https://github.com/yungSNAT/GhostSoap): prepare Australian Privacy Act requests to data brokers, for you to send from your own mailbox, and track deadlines and replies. Try `ghostsoap plan --pack start-here` ([install](https://github.com/yungSNAT/GhostSoap#install), [site](https://yungsnat.github.io/GhostSoap/)).
 - [Alcuin](https://github.com/yungSNAT/Alcuin): ask ChatGPT, or the OpenAI or Azure OpenAI API, about your source files from a CLI or MCP server, and keep each answer. Try `alcuin --dry-run summary --files-report -p "Review this module" --file src/lib.rs` ([install](https://github.com/yungSNAT/Alcuin#install)). [![Alcuin latest release](https://badgen.net/github/release/yungSNAT/Alcuin/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/Alcuin/releases/latest)
 
 <p>
@@ -47,7 +47,7 @@ These are personal projects; professional projects are on [ryanduguid](https://g
 - [PlutarchPages](https://github.com/yungSNAT/PlutarchPages): a pure Rust PDF workbench, from PdfCraft.
 - [PascalsLetter](https://github.com/yungSNAT/PascalsLetter): a distribution of RTK, which compresses command output before a coding agent reads it.
 - [GrievousGreps](https://github.com/yungSNAT/GrievousGreps): a distribution of Trail-Code, a code graph that shows a coding agent what a change reaches before it edits.
-- [ApollinaireASCII](https://github.com/yungSNAT/ApollinaireASCII): a Rust library, CLI and browser editor for ASCII art, block lettering and animation, from RASCII.
+- [ApollinaireASCII](https://github.com/yungSNAT/ApollinaireASCII): a Rust library, CLI and browser editor for ASCII art, block lettering and animation, from RASCII. [Try the editor](https://yungsnat.github.io/ApollinaireASCII/).
 - [reformed-agent](https://github.com/yungSNAT/reformed-agent): a Rust-first autonomous agent runtime, from Hermes Agent Ultra.
 - [PamweChete](https://github.com/yungSNAT/PamweChete): a pi coding-agent configuration to copy piece by piece (archived).
 
