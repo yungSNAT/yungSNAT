@@ -31,7 +31,7 @@ These are personal projects; professional projects are on [ryanduguid](https://g
 <a href="https://github.com/yungSNAT/Alcuin"><picture><source media="(max-width: 600px) and (prefers-color-scheme: light)" srcset=".github/assets/cards/alcuin-phone-light.svg"><source media="(max-width: 600px)" srcset=".github/assets/cards/alcuin-phone.svg"><source media="(prefers-color-scheme: light)" srcset=".github/assets/cards/alcuin-light.svg"><img src=".github/assets/cards/alcuin.svg" width="49%" alt="Alcuin card: Ask ChatGPT about your code; keep every answer."></picture></a>
 </p>
 
-- [GhostSoap](https://github.com/yungSNAT/GhostSoap): prepare Australian Privacy Act requests to data brokers, for you to send from your own mailbox. Try `ghostsoap plan --pack start-here` ([install](https://github.com/yungSNAT/GhostSoap#install)).
+- [GhostSoap](https://github.com/yungSNAT/GhostSoap): prepare Australian Privacy Act requests to data brokers, for you to send from your own mailbox, and track deadlines and replies. Try `ghostsoap plan --pack start-here` ([install](https://github.com/yungSNAT/GhostSoap#install)).
 - [Alcuin](https://github.com/yungSNAT/Alcuin): ask ChatGPT, or the OpenAI or Azure OpenAI API, about your source files from a CLI or MCP server, and keep each answer. Try `alcuin --dry-run summary --files-report -p "Review this module" --file src/lib.rs` ([install](https://github.com/yungSNAT/Alcuin#install)). [![Alcuin latest release](https://badgen.net/github/release/yungSNAT/Alcuin/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/Alcuin/releases/latest)
 
 <p>
@@ -40,7 +40,7 @@ These are personal projects; professional projects are on [ryanduguid](https://g
 </p>
 
 - [DiogenesLamp](https://github.com/yungSNAT/DiogenesLamp): browse Yupoo catalogues on one searchable local page, covers and metadata only. Try `lamp demo` ([install](https://github.com/yungSNAT/DiogenesLamp#install)). [![DiogenesLamp latest release](https://badgen.net/github/release/yungSNAT/DiogenesLamp/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/DiogenesLamp/releases/latest)
-- [BigSister](https://github.com/yungSNAT/BigSister): find where a coding agent's tokens go, from the transcripts Claude Code, Codex, pi, OpenCode, Gemini CLI and Qwen Code save on your machine. Try `bigsister all` ([install](https://github.com/yungSNAT/BigSister#install); v0.1.0, the latest release, names it `shaphan`). [![BigSister latest release](https://badgen.net/github/release/yungSNAT/BigSister/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/BigSister/releases/latest)
+- [BigSister](https://github.com/yungSNAT/BigSister): find where a coding agent's tokens go, from the transcripts Claude Code, Codex, pi, OpenCode, Gemini CLI and Qwen Code save on your machine. Try `bigsister all` ([install](https://github.com/yungSNAT/BigSister#install)). [![BigSister latest release](https://badgen.net/github/release/yungSNAT/BigSister/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/BigSister/releases/latest)
 
 ## Forks
 

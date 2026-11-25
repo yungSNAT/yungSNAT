@@ -23,7 +23,7 @@ make_site() {
   </picture>
 </p>
 
-[Tools](#tools) · [Notes](docs/notes.md#top)
+[Tools](#tools) · [Notes](docs/notes.md#notes)
 
 ## Tools
 
@@ -97,7 +97,7 @@ printf '\n![Dir](.github/assets)\n' >>"$site/README.md"
 expect 1 'directory used as markdown image fails'
 
 make_site dir-as-img
-sed -i 's|\.github/assets/banner\.svg|.github/assets|g' "$site/README.md"
+sed 's|\.github/assets/banner\.svg|.github/assets|g' "$site/README.md" >"$site/README.tmp" && mv "$site/README.tmp" "$site/README.md"
 expect 1 'directory used as image src fails'
 
 make_site traversal-link
@@ -178,8 +178,54 @@ make_site card-only-missing-llms
 printf '\n<a href="https://github.com/yungSNAT/CardOnly">Card</a>\n' >>"$site/README.md"
 expect 1 'card-only repository missing from llms.txt fails'
 
+make_site extra-llms-repo
+printf '\n- [GhostRepo](https://github.com/yungSNAT/GhostRepo): stale entry.\n' >>"$site/llms.txt"
+expect 1 'extra repository bullet in llms.txt missing from README.md fails'
+
+make_site extra-llms-inline-link
+printf '\nSee [GhostRepo](https://github.com/yungSNAT/GhostRepo#install).\n' >>"$site/llms.txt"
+expect 1 'extra inline yungSNAT repo link in llms.txt missing from README.md fails'
+
+make_site archived-also-in-llms
+printf '\n- [OldFork](https://github.com/yungSNAT/OldFork): archived.\n' >>"$site/llms.txt"
+expect 0 'archived repository present in both README.md and llms.txt passes'
+
+make_site missing-same-file-anchor
+printf '\n[Missing](#does-not-exist)\n' >>"$site/README.md"
+expect 1 'missing same-file #fragment anchor fails'
+
+make_site missing-cross-file-anchor
+printf '\n[Missing](docs/notes.md#does-not-exist)\n' >>"$site/README.md"
+expect 1 'missing cross-file #fragment anchor fails'
+
+make_site duplicate-and-html-anchors
+printf '\n<a id="custom-id"></a>\n\n## Tools\n\n[Second Tools](#tools-1) · [Custom](#custom-id)\n' >>"$site/README.md"
+expect 0 'duplicate heading suffix and HTML id anchors pass'
+
+make_site html-id-case-mismatch
+printf '\n<a id="Install"></a>\n\n[Install](#install)\n' >>"$site/README.md"
+expect 1 'fragment differing in case from an HTML id fails'
+
+make_site heading-fragment-upper-case
+printf '\n[Tools](#Tools)\n' >>"$site/README.md"
+expect 0 'upper-case fragment for a heading slug passes'
+
+make_site self-repo-blob-anchor-valid
+printf '\n## Reusing this code\n' >"$site/AGENTS.md"
+printf '\n[Reuse](https://github.com/yungSNAT/yungSNAT/blob/main/AGENTS.md#reusing-this-code)\n' >>"$site/llms.txt"
+expect 0 'valid self-repo blob/main link and anchor in llms.txt passes'
+
+make_site self-repo-blob-anchor-missing
+printf '\n## Reusing this code\n' >"$site/AGENTS.md"
+printf '\n[Reuse](https://github.com/yungSNAT/yungSNAT/blob/main/AGENTS.md#wrong-anchor)\n' >>"$site/llms.txt"
+expect 1 'missing anchor on self-repo blob/main link in llms.txt fails'
+
+make_site forks-broken-anchor
+printf '# Forks\n\n[Broken](#nope)\n' >"$site/FORKS.md"
+expect 1 'broken #fragment anchor in FORKS.md fails'
+
 make_site missing-end-marker
-sed -i '/releases:end/d' "$site/README.md"
+sed '/releases:end/d' "$site/README.md" >"$site/README.tmp" && mv "$site/README.tmp" "$site/README.md"
 expect 1 'missing releases:end marker fails'
 
 make_site reversed-markers

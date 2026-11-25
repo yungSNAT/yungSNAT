@@ -35,6 +35,7 @@ fixture() { printf '%s\n' "$2" >"$FIXTURES/$1"; }
 fixture Old $'2026-11-12T11:56:41Z\tv0.1.0\thttps://github.com/yungSNAT/Old/releases/tag/v0.1.0'
 fixture New $'2026-11-14T02:43:49Z\tv1.2.0-1\thttps://github.com/yungSNAT/New/releases/tag/v1.2.0-1'
 fixture Unreleased 404
+fixture Archived 500
 
 readme() {
   cat >"$work/README.md" <<EOF
@@ -43,6 +44,7 @@ readme() {
 - [Old](https://github.com/yungSNAT/Old): an old tool.
 - [Unreleased](https://github.com/yungSNAT/Unreleased): no release.
 - [New](https://github.com/yungSNAT/New): a newer fork.
+- [Archived](https://github.com/yungSNAT/Archived): kept for history (archived).
 - [Old](https://github.com/yungSNAT/Old) again.
 - [Other](https://github.com/someone/Other): not ours.
 
@@ -98,6 +100,10 @@ rm "$FIXTURES/Unreleased"
 readme $'<!-- releases:end -->\nAfter.'
 expect 1 'a listed repository that does not exist fails'
 fixture Unreleased 404
+
+readme $'<!-- releases:end -->\nAfter.'
+awk '/^## Latest releases$/ { print "- [New](https://github.com/yungSNAT/New): an older copy (archived)." } { print }' "$work/README.md" >"$work/README.tmp" && mv "$work/README.tmp" "$work/README.md"
+expect 0 'an archived row does not hide the same repository listed as live' "$want_list"
 
 fixture New $'2026-11-14T02:43:49Z\t\thttps://github.com/yungSNAT/New/releases/tag/x'
 readme $'<!-- releases:end -->\nAfter.'
