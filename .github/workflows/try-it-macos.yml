@@ -31,10 +31,10 @@ jobs:
               git clone --depth 1 https://github.com/yungSNAT/Puritanical "$RUNNER_TEMP/Puritanical"
               cd "$RUNNER_TEMP/Puritanical" && git log -1 --format='%H %cI'
               eval "$LINE" | tee dry.txt
-              grep -qF "would write chisle ruleset to $HOME/.codex/AGENTS.md" dry.txt
+              grep -qF "would write puritanical ruleset to $HOME/.codex/AGENTS.md" dry.txt
               test ! -e "$HOME/.codex/AGENTS.md"
               node bin/install.js --only codex
-              grep -qxF '<!-- chisle-begin -->' "$HOME/.codex/AGENTS.md"
+              grep -qxF '<!-- puritanical-begin -->' "$HOME/.codex/AGENTS.md"
               grep -qxF "$(head -n 1 AGENTS.md)" "$HOME/.codex/AGENTS.md"
           - tool: Laconic
             line: npx skills add yungSNAT/laconic --global --agent "*" --yes
