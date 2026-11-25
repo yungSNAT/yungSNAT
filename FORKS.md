@@ -1,6 +1,6 @@
 # Contribution forks
 
-Reviewed 13 November 2026 from the GitHub API. yungSNAT's forks offer generally useful fixes upstream as pull requests. File product issues upstream.
+Reviewed 25 November 2026 from the GitHub API. yungSNAT's forks offer generally useful fixes upstream as pull requests. File product issues upstream.
 
 Open, merged and closed are different states. The Open contributions column lists only pull requests open at the review date; a merged or closed one moves to Recent contributions and keeps its link.
 
@@ -9,6 +9,7 @@ Open, merged and closed are different states. The Open contributions column list
 | Fork | Upstream | Open contributions |
 | --- | --- | --- |
 | [PascalsLetter](https://github.com/yungSNAT/PascalsLetter) | [rtk-ai/rtk](https://github.com/rtk-ai/rtk) | None |
+| [GrievousGreps](https://github.com/yungSNAT/GrievousGreps) | [trailhq/Trail-Code](https://github.com/trailhq/Trail-Code) | [#815](https://github.com/trailhq/Trail-Code/pull/815), opened 10 November 2026: warn when Git cannot confirm the build cache is ignored |
 
 ## Recent contributions no longer open
 

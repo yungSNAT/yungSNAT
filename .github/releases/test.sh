@@ -35,6 +35,7 @@ fixture() { printf '%s\n' "$2" >"$FIXTURES/$1"; }
 fixture Old $'2026-11-12T11:56:41Z\tv0.1.0\thttps://github.com/yungSNAT/Old/releases/tag/v0.1.0'
 fixture New $'2026-11-14T02:43:49Z\tv1.2.0-1\thttps://github.com/yungSNAT/New/releases/tag/v1.2.0-1'
 fixture Unreleased 404
+fixture Archived 500
 
 readme() {
   cat >"$work/README.md" <<EOF
@@ -43,6 +44,7 @@ readme() {
 - [Old](https://github.com/yungSNAT/Old): an old tool.
 - [Unreleased](https://github.com/yungSNAT/Unreleased): no release.
 - [New](https://github.com/yungSNAT/New): a newer fork.
+- [Archived](https://github.com/yungSNAT/Archived): kept for history (archived).
 - [Old](https://github.com/yungSNAT/Old) again.
 - [Other](https://github.com/someone/Other): not ours.
 
