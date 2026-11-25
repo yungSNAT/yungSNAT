@@ -97,7 +97,7 @@ printf '\n![Dir](.github/assets)\n' >>"$site/README.md"
 expect 1 'directory used as markdown image fails'
 
 make_site dir-as-img
-sed -i 's|\.github/assets/banner\.svg|.github/assets|g' "$site/README.md"
+sed 's|\.github/assets/banner\.svg|.github/assets|g' "$site/README.md" >"$site/README.tmp" && mv "$site/README.tmp" "$site/README.md"
 expect 1 'directory used as image src fails'
 
 make_site traversal-link
@@ -202,6 +202,14 @@ make_site duplicate-and-html-anchors
 printf '\n<a id="custom-id"></a>\n\n## Tools\n\n[Second Tools](#tools-1) · [Custom](#custom-id)\n' >>"$site/README.md"
 expect 0 'duplicate heading suffix and HTML id anchors pass'
 
+make_site html-id-case-mismatch
+printf '\n<a id="Install"></a>\n\n[Install](#install)\n' >>"$site/README.md"
+expect 1 'fragment differing in case from an HTML id fails'
+
+make_site heading-fragment-upper-case
+printf '\n[Tools](#Tools)\n' >>"$site/README.md"
+expect 0 'upper-case fragment for a heading slug passes'
+
 make_site self-repo-blob-anchor-valid
 printf '\n## Reusing this code\n' >"$site/AGENTS.md"
 printf '\n[Reuse](https://github.com/yungSNAT/yungSNAT/blob/main/AGENTS.md#reusing-this-code)\n' >>"$site/llms.txt"
@@ -217,7 +225,7 @@ printf '# Forks\n\n[Broken](#nope)\n' >"$site/FORKS.md"
 expect 1 'broken #fragment anchor in FORKS.md fails'
 
 make_site missing-end-marker
-sed -i '/releases:end/d' "$site/README.md"
+sed '/releases:end/d' "$site/README.md" >"$site/README.tmp" && mv "$site/README.tmp" "$site/README.md"
 expect 1 'missing releases:end marker fails'
 
 make_site reversed-markers

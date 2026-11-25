@@ -101,6 +101,10 @@ readme $'<!-- releases:end -->\nAfter.'
 expect 1 'a listed repository that does not exist fails'
 fixture Unreleased 404
 
+readme $'<!-- releases:end -->\nAfter.'
+awk '/^## Latest releases$/ { print "- [New](https://github.com/yungSNAT/New): an older copy (archived)." } { print }' "$work/README.md" >"$work/README.tmp" && mv "$work/README.tmp" "$work/README.md"
+expect 0 'an archived row does not hide the same repository listed as live' "$want_list"
+
 fixture New $'2026-11-14T02:43:49Z\t\thttps://github.com/yungSNAT/New/releases/tag/x'
 readme $'<!-- releases:end -->\nAfter.'
 expect 1 'a release with no tag fails'

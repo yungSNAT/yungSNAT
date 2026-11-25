@@ -2,7 +2,8 @@
 # Rewrites the list between the release markers in a README: the latest
 # published release of each active repository the README lists as
 # '- [Name](https://github.com/yungSNAT/Name)', newest first, dated.
-# Rows marked '(archived)' are skipped without querying the API.
+# Rows marked '(archived)' are skipped without querying the API; a repository
+# that also has an unmarked row is still listed.
 # A listed repository with no published release is named on stderr and left
 # out; any other API failure stops the script before the README is written.
 # Shell, not Rust: the profile's only other code is shell, and the workflow
@@ -42,18 +43,12 @@ repos=$(awk '
   {
     r = bullet_repo($0)
     if (r == "") next
-    if (tolower($0) ~ /\(archived\)/) {
-      archived[r] = 1
-    } else if (!(r in seen)) {
+    if (tolower($0) !~ /\(archived\)/ && !(r in seen)) {
       seen[r] = 1
       order[++n] = r
     }
   }
-  END {
-    for (i = 1; i <= n; i++) {
-      if (!(order[i] in archived)) print order[i]
-    }
-  }
+  END { for (i = 1; i <= n; i++) print order[i] }
 ' "$readme")
 if [ -z "$repos" ]; then
   echo "::error::$readme lists no yungSNAT repository." >&2

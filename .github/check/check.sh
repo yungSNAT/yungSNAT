@@ -74,16 +74,16 @@ has_anchor() {
         rest = substr(rest, RSTART + RLENGTH)
         i = index(rest, q)
         if (i == 0) break
-        val = tolower(substr(rest, 1, i - 1))
+        val = substr(rest, 1, i - 1)
         rest = substr(rest, i + 1)
-        if (val != "") anchors[val] = 1
+        if (val != "") html_ids[val] = 1
       }
     }
     { sub(/\r$/, "") }
     /^[ \t]*(```|~~~)/ { in_fence = !in_fence; next }
     in_fence { next }
     {
-      if (match($0, /^[ ]?[ ]?[ ]?#{1,6}[ \t]+/)) {
+      if (match($0, /^[ ]?[ ]?[ ]?(######|#####|####|###|##|#)[ \t]+/)) {
         heading = substr($0, RSTART + RLENGTH)
         sub(/[ \t]+#+[ \t]*$/, "", heading)
         s = slugify(heading)
@@ -94,7 +94,9 @@ has_anchor() {
       record_attr(line, "id")
       if (tolower(line) ~ /<a[ \t]/) record_attr(line, "name")
     }
-    END { exit !(tolower(want) in anchors) }
+    # HTML ids match case-sensitively; heading slugs are lower case and
+    # GitHub also tries the lower-cased fragment against them.
+    END { exit !((want in html_ids) || (tolower(want) in anchors)) }
   ' "$file"
 }
 
