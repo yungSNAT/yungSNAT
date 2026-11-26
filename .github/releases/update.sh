@@ -93,7 +93,14 @@ sort -r "$work/rows" | while IFS=$'\t' read -r published tag url name; do
 done >"$work/list"
 
 awk -v s="$start" -v e="$end" -v list="$work/list" '
-  $0 == s { print; while ((getline line < list) > 0) print line; skip = 1; next }
-  $0 == e { skip = 0 }
+  { marker = $0; sub(/\r$/, "", marker) }
+  marker == s {
+    print
+    cr = substr($0, length(s) + 1)
+    while ((getline line < list) > 0) print line cr
+    skip = 1
+    next
+  }
+  marker == e { skip = 0 }
   !skip' "$readme" >"$work/readme"
 cat "$work/readme" >"$readme"
