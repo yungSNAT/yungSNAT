@@ -91,6 +91,16 @@ expect 0 'newest first, unreleased and duplicate and foreign links left out' "$w
 [[ $out == *'Unreleased: no published release'* ]] || { echo 'FAIL the unreleased repository is not named'; failures=$((failures + 1)); }
 expect 0 'a second run changes nothing' "$want_list"
 
+sed 's/$/\r/' "$work/README.md" >"$work/expected-crlf"
+readme $'<!-- releases:end -->\nAfter.'
+sed 's/$/\r/' "$work/README.md" >"$work/input-crlf"
+mv "$work/input-crlf" "$work/README.md"
+expect 0 'CRLF markers are accepted'
+if ! cmp -s "$work/expected-crlf" "$work/README.md"; then
+  echo 'FAIL the CRLF release list was not updated with its original line endings'
+  failures=$((failures + 1))
+fi
+
 fixture Unreleased 500
 readme $'<!-- releases:end -->\nAfter.'
 expect 1 'an API failure fails'
