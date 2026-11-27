@@ -12,6 +12,12 @@ set -euo pipefail
 export LC_ALL=C
 
 readme=${1:?usage: update.sh README.md}
+script_dir=$(cd "$(dirname "$0")" && pwd)
+bullet_repos="$script_dir/../lib/bullet-repos.awk"
+if [ ! -f "$bullet_repos" ]; then
+  echo "::error::Missing $bullet_repos." >&2
+  exit 2
+fi
 start='<!-- releases:start -->'
 end='<!-- releases:end -->'
 
@@ -25,31 +31,7 @@ if ! awk -v s="$start" -v e="$end" '
   exit 2
 fi
 
-repos=$(awk '
-  function bullet_repo(line,    s, p, q, label, url) {
-    if (!match(line, /^- \[[A-Za-z0-9._-]+\]\(https:\/\/github\.com\/yungSNAT\/[A-Za-z0-9._-]+\)/)) return ""
-    s = substr(line, 4)
-    p = index(s, "](")
-    label = substr(s, 1, p - 1)
-    url = substr(s, p + 2)
-    q = index(url, ")")
-    url = substr(url, 1, q - 1)
-    sub(/^https:\/\/github\.com\/yungSNAT\//, "", url)
-    return (label == url) ? label : ""
-  }
-  { sub(/\r$/, "") }
-  /^[ \t]*(```|~~~)/ { in_fence = !in_fence; next }
-  in_fence { next }
-  {
-    r = bullet_repo($0)
-    if (r == "") next
-    if (tolower($0) !~ /\(archived\)/ && !(r in seen)) {
-      seen[r] = 1
-      order[++n] = r
-    }
-  }
-  END { for (i = 1; i <= n; i++) print order[i] }
-' "$readme")
+repos=$(awk -f "$bullet_repos" -v only_active=1 "$readme")
 if [ -z "$repos" ]; then
   echo "::error::$readme lists no yungSNAT repository." >&2
   exit 2

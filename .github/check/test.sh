@@ -190,6 +190,61 @@ make_site archived-also-in-llms
 printf '\n- [OldFork](https://github.com/yungSNAT/OldFork): archived.\n' >>"$site/llms.txt"
 expect 0 'archived repository present in both README.md and llms.txt passes'
 
+make_site mixed-archived-active-missing-llms
+printf '\n- [Hybrid](https://github.com/yungSNAT/Hybrid): older copy (archived).\n- [Hybrid](https://github.com/yungSNAT/Hybrid): active tool.\n' >>"$site/README.md"
+expect 1 'mixed archived and active repository missing from llms.txt fails'
+if [[ $out != *"Active repository 'Hybrid' in README.md is missing from llms.txt."* ]]; then
+  echo 'FAIL mixed archived/active error did not name Hybrid as missing'
+  printf '%s\n' "$out" | sed 's/^/     /'
+  failures=$((failures + 1))
+fi
+
+make_site mixed-archived-active-present-llms
+printf '\n- [Hybrid](https://github.com/yungSNAT/Hybrid): older copy (archived).\n- [Hybrid](https://github.com/yungSNAT/Hybrid): active tool.\n' >>"$site/README.md"
+printf '\n- [Hybrid](https://github.com/yungSNAT/Hybrid): active tool.\n' >>"$site/llms.txt"
+expect 0 'mixed archived and active repository present in llms.txt passes'
+
+make_site llms-git-suffix-valid
+printf '\nClone https://github.com/yungSNAT/Antifragile.git, https://github.com/yungSNAT/OldFork.git or [self](https://github.com/yungSNAT/yungSNAT.git).\n' >>"$site/llms.txt"
+expect 0 '.git suffixed repository URLs in llms.txt pass'
+
+make_site llms-git-suffix-bullet
+sed 's|https://github\.com/yungSNAT/Antifragile)|https://github.com/yungSNAT/Antifragile.git)|' "$site/llms.txt" >"$site/llms.tmp" && mv "$site/llms.tmp" "$site/llms.txt"
+expect 0 '.git suffixed repository bullet in llms.txt passes'
+
+make_site llms-git-suffix-extra
+printf '\nClone [GhostRepo](https://github.com/yungSNAT/GhostRepo.git).\n' >>"$site/llms.txt"
+expect 1 'extra .git suffixed repository URL in llms.txt fails'
+if [[ $out != *"Repository 'GhostRepo' in llms.txt is missing from README.md."* ]]; then
+  echo 'FAIL extra .git URL did not strip .git suffix in error'
+  printf '%s\n' "$out" | sed 's/^/     /'
+  failures=$((failures + 1))
+fi
+
+make_site unicode-dash-and-emoji-anchors-valid
+printf '\n## Tools — notes\n## Tools—tight\n## Tools – en-dash\n## 🚀 Quick start\n## Quick 🚀 start\n## Quick start 🚀\n## Check ✅ done\n## Warn \342\232\240\357\270\217 note\n## Family \360\237\221\250\342\200\215\360\237\221\251\342\200\215\360\237\221\247 test\n## École Café\n## Quotes “smart” ‘single’\n## Hello — World\n## Hello – World\n\n[Em](#tools--notes) · [Tight](#toolstight) · [En](#tools--en-dash) · [Lead](#-quick-start) · [Mid](#quick--start) · [Trail](#quick-start-) · [Check](#check--done) · [Warn](#warn-\357\270\217-note) · [WarnPct](#warn-%%ef%%b8%%8f-note) · [Family](#family-\342\200\215\342\200\215-test) · [Cafe](#école-café) · [CafeUp](#École-Café) · [CafePct](#%%c3%%a9cole-caf%%c3%%a9) · [Quotes](#quotes-smart-single) · [H1](#hello--world) · [H2](#hello--world-1)\n' >>"$site/README.md"
+expect 0 'GitHub heading slugs for em dashes, emoji, variation selectors and accented Latin pass'
+
+make_site em-dash-raw-anchor-fails
+printf '\n## Tools — notes\n\n[Bad](#tools-—-notes)\n' >>"$site/README.md"
+expect 1 'fragment retaining em dash fails'
+
+make_site leading-emoji-missing-hyphen-fails
+printf '\n## 🚀 Quick start\n\n[Bad](#quick-start)\n' >>"$site/README.md"
+expect 1 'fragment dropping leading hyphen after leading emoji fails'
+
+make_site emoji-only-heading-has-no-anchor
+printf '\n## 🚀\n\n[Bad](#🚀)\n' >>"$site/README.md"
+expect 1 'emoji-only heading produces no anchor'
+
+make_site warn-emoji-dropped-fe0f-fails
+printf '\n## Warn \342\232\240\357\270\217 note\n\n[Bad](#warn--note)\n' >>"$site/README.md"
+expect 1 'fragment dropping U+FE0F variation selector fails'
+
+make_site pct-nul-fragment-fails
+printf '\n[Bad](#tools%%00)\n' >>"$site/README.md"
+expect 1 'percent-encoded NUL in fragment fails'
+
 make_site missing-same-file-anchor
 printf '\n[Missing](#does-not-exist)\n' >>"$site/README.md"
 expect 1 'missing same-file #fragment anchor fails'
