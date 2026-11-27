@@ -58,13 +58,13 @@ Fixes the forks offer upstream are listed in [FORKS.md](https://github.com/yungS
 Each repository's latest release, newest first. [A daily workflow](https://github.com/yungSNAT/yungSNAT/blob/main/.github/workflows/releases.yml) updates this list from GitHub.
 
 <!-- releases:start -->
+- 26 Nov 2026: [Laconic laconic-check-v0.6.1](https://github.com/yungSNAT/Laconic/releases/tag/laconic-check-v0.6.1)
 - 24 Nov 2026: [DiogenesLamp v0.1.3](https://github.com/yungSNAT/DiogenesLamp/releases/tag/v0.1.3)
 - 24 Nov 2026: [reformed-agent v0.22.0](https://github.com/yungSNAT/reformed-agent/releases/tag/v0.22.0)
 - 24 Nov 2026: [ApollinaireASCII v0.4.2](https://github.com/yungSNAT/ApollinaireASCII/releases/tag/v0.4.2)
 - 24 Nov 2026: [PascalsLetter fork-v1.2.0-2](https://github.com/yungSNAT/PascalsLetter/releases/tag/fork-v1.2.0-2)
 - 24 Nov 2026: [Alcuin v0.2.0](https://github.com/yungSNAT/Alcuin/releases/tag/v0.2.0)
 - 24 Nov 2026: [BigSister v0.2.0](https://github.com/yungSNAT/BigSister/releases/tag/v0.2.0)
-- 24 Nov 2026: [Laconic laconic-check-v0.6.0](https://github.com/yungSNAT/Laconic/releases/tag/laconic-check-v0.6.0)
 - 21 Nov 2026: [Puritanical v1.0.0](https://github.com/yungSNAT/Puritanical/releases/tag/v1.0.0)
 - 14 Nov 2026: [PlutarchPages v0.18.2](https://github.com/yungSNAT/PlutarchPages/releases/tag/v0.18.2)
 <!-- releases:end -->
