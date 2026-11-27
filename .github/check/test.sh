@@ -208,6 +208,10 @@ make_site llms-git-suffix-valid
 printf '\nClone https://github.com/yungSNAT/Antifragile.git, https://github.com/yungSNAT/OldFork.git or [self](https://github.com/yungSNAT/yungSNAT.git).\n' >>"$site/llms.txt"
 expect 0 '.git suffixed repository URLs in llms.txt pass'
 
+make_site llms-git-suffix-sentence-dot
+printf '\nClone https://github.com/yungSNAT/Antifragile.git. Mirror https://github.com/yungSNAT/yungSNAT.git.\n' >>"$site/llms.txt"
+expect 0 'bare sentence-ending .git. repository URLs in llms.txt pass'
+
 make_site llms-git-suffix-bullet
 sed 's|https://github\.com/yungSNAT/Antifragile)|https://github.com/yungSNAT/Antifragile.git)|' "$site/llms.txt" >"$site/llms.tmp" && mv "$site/llms.tmp" "$site/llms.txt"
 expect 0 '.git suffixed repository bullet in llms.txt passes'
@@ -221,20 +225,43 @@ if [[ $out != *"Repository 'GhostRepo' in llms.txt is missing from README.md."* 
   failures=$((failures + 1))
 fi
 
+make_site llms-git-suffix-sentence-dot-extra
+printf '\nClone https://github.com/yungSNAT/GhostRepo.git.\n' >>"$site/llms.txt"
+expect 1 'extra bare sentence-ending .git. URL in llms.txt fails'
+if [[ $out != *"Repository 'GhostRepo' in llms.txt is missing from README.md."* ]]; then
+  echo 'FAIL extra bare .git. URL did not strip trailing dot and .git suffix in error'
+  printf '%s\n' "$out" | sed 's/^/     /'
+  failures=$((failures + 1))
+fi
+
+make_site card-git-suffix-valid
+sed 's|href="https://github\.com/yungSNAT/Antifragile"|href="https://github.com/yungSNAT/Antifragile.git"|' "$site/README.md" >"$site/README.tmp" && mv "$site/README.tmp" "$site/README.md"
+printf '\n<a href="https://github.com/yungSNAT/yungSNAT.git">Profile</a>\n' >>"$site/README.md"
+expect 0 '.git suffixed README.md card hrefs pass'
+
+make_site card-git-suffix-missing-llms
+printf '\n<a href="https://github.com/yungSNAT/CardOnly.git">Card</a>\n' >>"$site/README.md"
+expect 1 '.git suffixed card-only repository missing from llms.txt fails'
+if [[ $out != *"Active repository 'CardOnly' in README.md is missing from llms.txt."* ]]; then
+  echo 'FAIL .git card href did not strip .git suffix in error'
+  printf '%s\n' "$out" | sed 's/^/     /'
+  failures=$((failures + 1))
+fi
+
 make_site unicode-dash-and-emoji-anchors-valid
-printf '\n## Tools — notes\n## Tools—tight\n## Tools – en-dash\n## 🚀 Quick start\n## Quick 🚀 start\n## Quick start 🚀\n## Check ✅ done\n## Warn \342\232\240\357\270\217 note\n## Family \360\237\221\250\342\200\215\360\237\221\251\342\200\215\360\237\221\247 test\n## École Café\n## Quotes “smart” ‘single’\n## Hello — World\n## Hello – World\n\n[Em](#tools--notes) · [Tight](#toolstight) · [En](#tools--en-dash) · [Lead](#-quick-start) · [Mid](#quick--start) · [Trail](#quick-start-) · [Check](#check--done) · [Warn](#warn-\357\270\217-note) · [WarnPct](#warn-%%ef%%b8%%8f-note) · [Family](#family-\342\200\215\342\200\215-test) · [Cafe](#école-café) · [CafeUp](#École-Café) · [CafePct](#%%c3%%a9cole-caf%%c3%%a9) · [Quotes](#quotes-smart-single) · [H1](#hello--world) · [H2](#hello--world-1)\n' >>"$site/README.md"
-expect 0 'GitHub heading slugs for em dashes, emoji, variation selectors and accented Latin pass'
+printf '\n## Tools \342\200\224 notes\n## Tools\342\200\224tight\n## Tools \342\200\223 en-dash\n## \360\237\232\200 Quick start\n## Quick \360\237\232\200 start\n## Quick start \360\237\232\200\n## Check \342\234\205 done\n## Warn \342\232\240\357\270\217 note\n## Family \360\237\221\250\342\200\215\360\237\221\251\342\200\215\360\237\221\247 test\n## \303\211cole Caf\303\251\n## Quotes \342\200\234smart\342\200\235 \342\200\230single\342\200\231\n## Hello \342\200\224 World\n## Hello \342\200\223 World\n## Math \342\237\202 perp \342\237\266 arrow \342\240\201 braille\n## Sup \342\201\260 \342\201\261 \342\201\264 \342\201\272 \342\201\277 \342\202\200 \342\202\212 \342\202\220\n## England \360\237\217\264\363\240\201\247\363\240\201\242\363\240\201\245\363\240\201\256\363\240\201\247\363\240\201\277 flag\n## Care \342\204\205 \342\204\236 \342\204\256\n## Tilde \342\270\257 vert\n## Seg \360\237\257\260\360\237\257\271 digits\n\n[Em](#tools--notes) [Tight](#toolstight) [En](#tools--en-dash) [Lead](#-quick-start) [Mid](#quick--start) [Trail](#quick-start-) [Check](#check--done) [Warn](#warn-\357\270\217-note) [WarnPct](#warn-%%ef%%b8%%8f-note) [Family](#family-\342\200\215\342\200\215-test) [Cafe](#\303\251cole-caf\303\251) [CafeUp](#\303\211cole-Caf\303\251) [CafePct](#%%c3%%a9cole-caf%%c3%%a9) [Quotes](#quotes-smart-single) [H1](#hello--world) [H2](#hello--world-1) [Math](#math--perp--arrow--braille) [Sup](#sup--\342\201\261---\342\201\277---\342\202\220) [England](#england--flag) [Care](#care---) [Tilde](#tilde-\342\270\257-vert) [Seg](#seg-\360\237\257\260\360\237\257\271-digits)\n' >>"$site/README.md"
+expect 0 'GitHub heading slugs for Unicode dashes, symbols, emoji, tags and letters pass'
 
 make_site em-dash-raw-anchor-fails
-printf '\n## Tools — notes\n\n[Bad](#tools-—-notes)\n' >>"$site/README.md"
+printf '\n## Tools \342\200\224 notes\n\n[Bad](#tools-\342\200\224-notes)\n' >>"$site/README.md"
 expect 1 'fragment retaining em dash fails'
 
 make_site leading-emoji-missing-hyphen-fails
-printf '\n## 🚀 Quick start\n\n[Bad](#quick-start)\n' >>"$site/README.md"
+printf '\n## \360\237\232\200 Quick start\n\n[Bad](#quick-start)\n' >>"$site/README.md"
 expect 1 'fragment dropping leading hyphen after leading emoji fails'
 
 make_site emoji-only-heading-has-no-anchor
-printf '\n## 🚀\n\n[Bad](#🚀)\n' >>"$site/README.md"
+printf '\n## \360\237\232\200\n\n[Bad](#\360\237\232\200)\n' >>"$site/README.md"
 expect 1 'emoji-only heading produces no anchor'
 
 make_site warn-emoji-dropped-fe0f-fails
@@ -244,6 +271,18 @@ expect 1 'fragment dropping U+FE0F variation selector fails'
 make_site pct-nul-fragment-fails
 printf '\n[Bad](#tools%%00)\n' >>"$site/README.md"
 expect 1 'percent-encoded NUL in fragment fails'
+
+bullet_awk="$(cd "$(dirname "$0")" && pwd)/../lib/bullet-repos.awk"
+printf '```\n- [Inside](https://github.com/yungSNAT/Inside)\n' >"$work/fence1.md"
+printf -- '- [AfterFence](https://github.com/yungSNAT/AfterFence)\n' >"$work/fence2.md"
+multi_out=$(awk -f "$bullet_awk" "$work/fence1.md" "$work/fence2.md")
+if [ "$multi_out" != $'active\tAfterFence' ]; then
+  echo 'FAIL bullet-repos.awk did not reset fence state on a second file'
+  printf '%s\n' "$multi_out" | sed 's/^/     /'
+  failures=$((failures + 1))
+else
+  echo 'ok   bullet-repos.awk resets fence state across input files'
+fi
 
 make_site missing-same-file-anchor
 printf '\n[Missing](#does-not-exist)\n' >>"$site/README.md"

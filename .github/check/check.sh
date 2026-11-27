@@ -104,11 +104,11 @@ has_anchor() {
       if (cp >= 8192 && cp <= 8303) {
         return (cp != 8204 && cp != 8205 && cp != 8255 && cp != 8256 && cp != 8276)
       }
+      if (cp >= 8304 && cp <= 8334) return (cp != 8305 && cp != 8319)
       if (cp >= 8352 && cp <= 8399) return 1
-      if (cp == 8451 || cp == 8457 || cp == 8470 || cp == 8471 || cp == 8480 || cp == 8482) return 1
-      if (cp >= 8592 && cp <= 10175) return 1
-      if (cp >= 10496 && cp <= 11263) return 1
-      if (cp >= 11776 && cp <= 11903) return 1
+      if ((cp >= 8448 && cp <= 8449) || (cp >= 8451 && cp <= 8454) || cp == 8456 || cp == 8457 || cp == 8468 || (cp >= 8470 && cp <= 8472) || (cp >= 8478 && cp <= 8483) || cp == 8485 || cp == 8487 || cp == 8489 || cp == 8494 || cp == 8506 || cp == 8507 || (cp >= 8512 && cp <= 8516) || (cp >= 8522 && cp <= 8525) || cp == 8527) return 1
+      if (cp >= 8592 && cp <= 11263) return 1
+      if (cp >= 11776 && cp <= 11903) return (cp != 11823)
       if ((cp >= 12288 && cp <= 12292) || (cp >= 12296 && cp <= 12320) || cp == 12336 || cp == 12342 || cp == 12343 || (cp >= 12349 && cp <= 12351)) return 1
       if (cp >= 12800 && cp <= 13311) return 1
       if (cp >= 65040 && cp <= 65055) return 1
@@ -116,7 +116,8 @@ has_anchor() {
         return (cp != 65075 && cp != 65076 && !(cp >= 65101 && cp <= 65103))
       }
       if ((cp >= 65281 && cp <= 65295) || (cp >= 65306 && cp <= 65312) || (cp >= 65339 && cp <= 65342) || cp == 65344 || (cp >= 65371 && cp <= 65381) || (cp >= 65504 && cp <= 65519)) return 1
-      if (cp >= 126976 && cp <= 130047) return 1
+      if (cp >= 126976 && cp <= 130047) return !(cp >= 130032 && cp <= 130041)
+      if (cp >= 917536 && cp <= 917631) return 1
       return 0
     }
     function strip_inline(s,    t) {
@@ -500,6 +501,7 @@ done < <(
         raw = substr(rest, RSTART, RLENGTH)
         rest = substr(rest, RSTART + RLENGTH)
         sub(/^https:\/\/github\.com\/yungSNAT\//, "", raw)
+        sub(/\.+$/, "", raw)
         sub(/\.git$/, "", raw)
         if (raw != "" && raw != "yungSNAT" && !(raw in llms_ref_seen)) {
           llms_ref_seen[raw] = 1

@@ -17,6 +17,7 @@ function bullet_repo(line,    s, p, q, label, url) {
   sub(/\.git$/, "", url)
   return (label == url && label != "yungSNAT") ? label : ""
 }
+FNR == 1 { in_fence = 0 }
 { sub(/\r$/, "") }
 /^[ \t]*(```|~~~)/ { in_fence = !in_fence; next }
 in_fence { next }
