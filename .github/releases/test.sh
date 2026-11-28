@@ -115,6 +115,20 @@ readme $'<!-- releases:end -->\nAfter.'
 awk '/^## Latest releases$/ { print "- [New](https://github.com/yungSNAT/New): an older copy (archived)." } { print }' "$work/README.md" >"$work/README.tmp" && mv "$work/README.tmp" "$work/README.md"
 expect 0 'an archived row does not hide the same repository listed as live' "$want_list"
 
+readme $'<!-- releases:end -->\nAfter.'
+awk '/^- \[New\]/ { print "- [New](https://github.com/yungSNAT/New): an older copy (archived)." } { print }' "$work/README.md" >"$work/README.tmp" && mv "$work/README.tmp" "$work/README.md"
+expect 0 'an archived row before a live row does not hide the repository' "$want_list"
+
+readme $'<!-- releases:end -->\nAfter.'
+sed 's|https://github\.com/yungSNAT/New)|https://github.com/yungSNAT/New.git)|' "$work/README.md" >"$work/README.tmp" && mv "$work/README.tmp" "$work/README.md"
+expect 0 'a .git suffixed repository bullet is still updated' "$want_list"
+
+fixture yungSNAT 500
+readme $'<!-- releases:end -->\nAfter.'
+awk '/^## Latest releases$/ { print "- [yungSNAT](https://github.com/yungSNAT/yungSNAT): this profile." } { print }' "$work/README.md" >"$work/README.tmp" && mv "$work/README.tmp" "$work/README.md"
+expect 0 'a self-referencing yungSNAT bullet is skipped without an API call' "$want_list"
+rm -f "$FIXTURES/yungSNAT"
+
 fixture New $'2026-11-14T02:43:49Z\t\thttps://github.com/yungSNAT/New/releases/tag/x'
 readme $'<!-- releases:end -->\nAfter.'
 expect 1 'a release with no tag fails'
