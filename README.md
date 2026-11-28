@@ -40,15 +40,15 @@ These are personal projects; professional projects are on [ryanduguid](https://g
 </p>
 
 - [DiogenesLamp](https://github.com/yungSNAT/DiogenesLamp): browse Yupoo catalogues on one searchable local page, covers and metadata only. Try `lamp demo` ([install](https://github.com/yungSNAT/DiogenesLamp#install)). [![DiogenesLamp latest release](https://badgen.net/github/release/yungSNAT/DiogenesLamp/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/DiogenesLamp/releases/latest)
-- [BigSister](https://github.com/yungSNAT/BigSister): find where a coding agent's tokens go, from the transcripts Claude Code, Codex, pi, OpenCode, Gemini CLI and Qwen Code save on your machine. Try `bigsister all` ([install](https://github.com/yungSNAT/BigSister#install)). [![BigSister latest release](https://badgen.net/github/release/yungSNAT/BigSister/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/BigSister/releases/latest)
+- [BigSister](https://github.com/yungSNAT/BigSister): find where a coding agent's tokens go, from the transcripts Claude Code, Codex, pi, OpenCode, Gemini CLI, Qwen Code and Antigravity save on your machine, plus OTLP/JSON traces. Try `bigsister all` ([install](https://github.com/yungSNAT/BigSister#install)). [![BigSister latest release](https://badgen.net/github/release/yungSNAT/BigSister/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/BigSister/releases/latest)
 
 ## Forks
 
-- [PlutarchPages](https://github.com/yungSNAT/PlutarchPages): a pure Rust PDF workbench, from PdfCraft.
-- [PascalsLetter](https://github.com/yungSNAT/PascalsLetter): a distribution of RTK, which compresses command output before a coding agent reads it.
+- [PlutarchPages](https://github.com/yungSNAT/PlutarchPages): a pure Rust PDF workbench, from PdfCraft. [![PlutarchPages latest release](https://badgen.net/github/release/yungSNAT/PlutarchPages/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/PlutarchPages/releases/latest)
+- [PascalsLetter](https://github.com/yungSNAT/PascalsLetter): a distribution of RTK, which compresses command output before a coding agent reads it. [![PascalsLetter latest release](https://badgen.net/github/release/yungSNAT/PascalsLetter/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/PascalsLetter/releases/latest)
 - [GrievousGreps](https://github.com/yungSNAT/GrievousGreps): a distribution of Trail-Code, a code graph that shows a coding agent what a change reaches before it edits.
-- [ApollinaireASCII](https://github.com/yungSNAT/ApollinaireASCII): a Rust library, CLI and browser editor for ASCII art, block lettering and animation, from RASCII. [Try the editor](https://yungsnat.github.io/ApollinaireASCII/).
-- [reformed-agent](https://github.com/yungSNAT/reformed-agent): a Rust-first autonomous agent runtime, from Hermes Agent Ultra.
+- [ApollinaireASCII](https://github.com/yungSNAT/ApollinaireASCII): a Rust library, CLI and browser editor for ASCII art, block lettering and animation, from RASCII. [Try the editor](https://yungsnat.github.io/ApollinaireASCII/). [![ApollinaireASCII latest release](https://badgen.net/github/release/yungSNAT/ApollinaireASCII/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/ApollinaireASCII/releases/latest)
+- [reformed-agent](https://github.com/yungSNAT/reformed-agent): a Rust-first autonomous agent runtime, from Hermes Agent Ultra. [![reformed-agent latest release](https://badgen.net/github/release/yungSNAT/reformed-agent/stable?label=release&color=66023C&labelColor=000000)](https://github.com/yungSNAT/reformed-agent/releases/latest)
 - [PamweChete](https://github.com/yungSNAT/PamweChete): a pi coding-agent configuration to copy piece by piece (archived).
 
 Fixes the forks offer upstream are listed in [FORKS.md](https://github.com/yungSNAT/yungSNAT/blob/main/FORKS.md).
