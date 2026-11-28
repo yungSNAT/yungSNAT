@@ -19,7 +19,7 @@ function bullet_repo(line,    s, p, q, label, url) {
 }
 function fence_open(line,    s, ch, len, rest) {
   s = line
-  sub(/^[ \t]+/, "", s)
+  sub(/^[ ]?[ ]?[ ]?/, "", s)
   if (match(s, /^```+/)) {
     ch = "`"
     len = RLENGTH
@@ -37,7 +37,7 @@ function fence_open(line,    s, ch, len, rest) {
 }
 function fence_close(line,    s, len) {
   s = line
-  sub(/^[ \t]+/, "", s)
+  sub(/^[ ]?[ ]?[ ]?/, "", s)
   if (fence_ch == "`") {
     if (!match(s, /^```+/)) return 0
   } else {

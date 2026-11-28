@@ -316,6 +316,45 @@ else
   echo 'ok   bullet-repos.awk tracks opening fence delimiter and length'
 fi
 
+cat >"$work/indent-open-4sp.md" <<'EOF'
+    ```
+- [AfterFourSpaceOpener](https://github.com/yungSNAT/AfterFourSpaceOpener)
+EOF
+indent_open_out=$(awk -f "$bullet_awk" "$work/indent-open-4sp.md")
+if [ "$indent_open_out" != $'active\tAfterFourSpaceOpener' ]; then
+  echo 'FAIL bullet-repos.awk opened a fence on a 4-space-indented delimiter'
+  printf '%s\n' "$indent_open_out" | sed 's/^/     /'
+  failures=$((failures + 1))
+else
+  echo 'ok   bullet-repos.awk ignores 4-space-indented fence openers'
+fi
+
+cat >"$work/indent-close-4sp.md" <<'EOF'
+   ```
+    ```
+- [StillInsideFourSpace](https://github.com/yungSNAT/StillInsideFourSpace)
+   ```
+- [AfterThreeSpaceClose](https://github.com/yungSNAT/AfterThreeSpaceClose)
+EOF
+indent_close_out=$(awk -f "$bullet_awk" "$work/indent-close-4sp.md")
+if [ "$indent_close_out" != $'active\tAfterThreeSpaceClose' ]; then
+  echo 'FAIL bullet-repos.awk closed a fence on a 4-space-indented delimiter'
+  printf '%s\n' "$indent_close_out" | sed 's/^/     /'
+  failures=$((failures + 1))
+else
+  echo 'ok   bullet-repos.awk ignores 4-space-indented fence closers and honours 3-space fences'
+fi
+
+printf '\t\140\140\140\n- [AfterTabOpener](https://github.com/yungSNAT/AfterTabOpener)\n~~~\n\t~~~\n- [StillInsideTab](https://github.com/yungSNAT/StillInsideTab)\n~~~\n- [AfterTabClose](https://github.com/yungSNAT/AfterTabClose)\n' >"$work/indent-tab.md"
+indent_tab_out=$(awk -f "$bullet_awk" "$work/indent-tab.md")
+if [ "$indent_tab_out" != $'active\tAfterTabOpener\nactive\tAfterTabClose' ]; then
+  echo 'FAIL bullet-repos.awk treated a tab-indented delimiter as a fence'
+  printf '%s\n' "$indent_tab_out" | sed 's/^/     /'
+  failures=$((failures + 1))
+else
+  echo 'ok   bullet-repos.awk ignores tab-indented fence openers and closers'
+fi
+
 make_site missing-same-file-anchor
 printf '\n[Missing](#does-not-exist)\n' >>"$site/README.md"
 expect 1 'missing same-file #fragment anchor fails'
