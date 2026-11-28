@@ -17,10 +17,47 @@ function bullet_repo(line,    s, p, q, label, url) {
   sub(/\.git$/, "", url)
   return (label == url && label != "yungSNAT") ? label : ""
 }
-FNR == 1 { in_fence = 0 }
+function fence_open(line,    s, ch, len, rest) {
+  s = line
+  sub(/^[ \t]+/, "", s)
+  if (match(s, /^```+/)) {
+    ch = "`"
+    len = RLENGTH
+    rest = substr(s, len + 1)
+    if (index(rest, "`") > 0) return 0
+  } else if (match(s, /^~~~+/)) {
+    ch = "~"
+    len = RLENGTH
+  } else {
+    return 0
+  }
+  fence_ch = ch
+  fence_len = len
+  return 1
+}
+function fence_close(line,    s, len) {
+  s = line
+  sub(/^[ \t]+/, "", s)
+  if (fence_ch == "`") {
+    if (!match(s, /^```+/)) return 0
+  } else {
+    if (!match(s, /^~~~+/)) return 0
+  }
+  len = RLENGTH
+  if (len < fence_len) return 0
+  return (substr(s, len + 1) ~ /^[ \t]*$/)
+}
+FNR == 1 { in_fence = 0; fence_ch = ""; fence_len = 0 }
 { sub(/\r$/, "") }
-/^[ \t]*(```|~~~)/ { in_fence = !in_fence; next }
-in_fence { next }
+in_fence {
+  if (fence_close($0)) {
+    in_fence = 0
+    fence_ch = ""
+    fence_len = 0
+  }
+  next
+}
+fence_open($0) { in_fence = 1; next }
 {
   r = bullet_repo($0)
   if (r == "") next

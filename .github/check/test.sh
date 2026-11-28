@@ -272,6 +272,14 @@ make_site pct-nul-fragment-fails
 printf '\n[Bad](#tools%%00)\n' >>"$site/README.md"
 expect 1 'percent-encoded NUL in fragment fails'
 
+make_site unicode-case-folding-anchors
+printf '\n## \316\224\316\237\316\232\316\231\316\234\316\227\n## \316\237\316\224\316\237\316\243 \316\243\316\231\316\223\316\234\316\221\n## \316\206\316\210\316\211\316\212\316\214\316\216\316\217\n## \320\237\320\240\320\230\320\222\320\225\320\242 \320\201\320\226\n## \304\214\305\230\305\240\305\275 \305\201\304\260\305\270 \341\272\236\n## \324\261\324\262\324\263\n## \357\274\241\357\274\242\357\274\272\n## \360\220\220\200\360\220\220\201\n\n[Gr](#\316\264\316\277\316\272\316\271\316\274\316\267) [GrUp](#\316\224\316\237\316\232\316\231\316\234\316\227) [GrPct](#%%ce%%b4%%ce%%bf%%ce%%ba%%ce%%b9%%ce%%bc%%ce%%b7) [Sig](#\316\277\316\264\316\277\317\203-\317\203\316\271\316\263\316\274\316\261) [GrAcc](#\316\254\316\255\316\256\316\257\317\214\317\215\317\216) [Cyr](#\320\277\321\200\320\270\320\262\320\265\321\202-\321\221\320\266) [Lat](#\304\215\305\231\305\241\305\276-\305\202i\314\207\303\277-\303\237) [Arm](#\325\241\325\242\325\243) [Fw](#\357\275\201\357\275\202\357\275\232) [Des](#\360\220\220\250\360\220\220\251)\n' >>"$site/README.md"
+expect 0 'GitHub Unicode lowercase heading slugs (Greek, Cyrillic, Latin-Extended, Armenian, fullwidth, Deseret) pass'
+
+make_site greek-html-id-case-mismatch
+printf '\n<a id="\316\224\316\237\316\232\316\231\316\234\316\227"></a>\n\n[Bad](#\316\264\316\277\316\272\316\271\316\274\316\267)\n' >>"$site/README.md"
+expect 1 'lowercase Greek fragment differing in case from HTML id fails'
+
 bullet_awk="$(cd "$(dirname "$0")" && pwd)/../lib/bullet-repos.awk"
 printf '```\n- [Inside](https://github.com/yungSNAT/Inside)\n' >"$work/fence1.md"
 printf -- '- [AfterFence](https://github.com/yungSNAT/AfterFence)\n' >"$work/fence2.md"
@@ -282,6 +290,30 @@ if [ "$multi_out" != $'active\tAfterFence' ]; then
   failures=$((failures + 1))
 else
   echo 'ok   bullet-repos.awk resets fence state across input files'
+fi
+
+cat >"$work/nested-fence.md" <<'EOF'
+````markdown
+```
+- [FakeInner](https://github.com/yungSNAT/FakeInner)
+```
+- [StillFenced](https://github.com/yungSNAT/StillFenced)
+~~~~
+- [AlsoFenced](https://github.com/yungSNAT/AlsoFenced)
+````
+~~~
+```
+- [InsideTilde](https://github.com/yungSNAT/InsideTilde)
+~~~
+- [AfterNested](https://github.com/yungSNAT/AfterNested)
+EOF
+nested_out=$(awk -f "$bullet_awk" "$work/nested-fence.md")
+if [ "$nested_out" != $'active\tAfterNested' ]; then
+  echo 'FAIL bullet-repos.awk closed a fence on a shorter or mismatched delimiter'
+  printf '%s\n' "$nested_out" | sed 's/^/     /'
+  failures=$((failures + 1))
+else
+  echo 'ok   bullet-repos.awk tracks opening fence delimiter and length'
 fi
 
 make_site missing-same-file-anchor

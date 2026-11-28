@@ -45,6 +45,44 @@ has_anchor() {
       want = ENVIRON["ANCHOR_WANT"]
       for (b = 1; b < 256; b++) ord[sprintf("%c", b)] = b
       hex = "0123456789abcdef"
+      # Unicode 17.0 non-ASCII single-codepoint lowercase mappings (start:end:step:delta
+      # or cp:delta); U+0130 -> i + U+0307 is handled in utf8_lower().
+      lc_spec = "192:214:1:32 216:222:1:32 256:302:2:1 306:310:2:1 313:327:2:1 330:374:2:1 376:-121"
+      lc_spec = lc_spec " 377:381:2:1 385:210 386:388:2:1 390:206 391:1 393:394:1:205 395:1 398:79 399:202 400:203"
+      lc_spec = lc_spec " 401:1 403:205 404:207 406:211 407:209 408:1 412:211 413:213 415:214 416:420:2:1 422:218"
+      lc_spec = lc_spec " 423:1 425:218 428:1 430:218 431:1 433:434:1:217 435:437:2:1 439:219 440:1 444:1 452:2 453:1"
+      lc_spec = lc_spec " 455:2 456:1 458:2 459:475:2:1 478:494:2:1 497:2 498:500:2:1 502:-97 503:-56 504:542:2:1"
+      lc_spec = lc_spec " 544:-130 546:562:2:1 570:10795 571:1 573:-163 574:10792 577:1 579:-195 580:69 581:71"
+      lc_spec = lc_spec " 582:590:2:1 880:882:2:1 886:1 895:116 902:38 904:906:1:37 908:64 910:911:1:63 913:929:1:32"
+      lc_spec = lc_spec " 931:939:1:32 975:8 984:1006:2:1 1012:-60 1015:1 1017:-7 1018:1 1021:1023:1:-130"
+      lc_spec = lc_spec " 1024:1039:1:80 1040:1071:1:32 1120:1152:2:1 1162:1214:2:1 1216:15 1217:1229:2:1"
+      lc_spec = lc_spec " 1232:1326:2:1 1329:1366:1:48 4256:4293:1:7264 4295:7264 4301:7264 5024:5103:1:38864"
+      lc_spec = lc_spec " 5104:5109:1:8 7305:1 7312:7354:1:-3008 7357:7359:1:-3008 7680:7828:2:1 7838:-7615"
+      lc_spec = lc_spec " 7840:7934:2:1 7944:7951:1:-8 7960:7965:1:-8 7976:7983:1:-8 7992:7999:1:-8 8008:8013:1:-8"
+      lc_spec = lc_spec " 8025:8031:2:-8 8040:8047:1:-8 8072:8079:1:-8 8088:8095:1:-8 8104:8111:1:-8 8120:8121:1:-8"
+      lc_spec = lc_spec " 8122:8123:1:-74 8124:-9 8136:8139:1:-86 8140:-9 8152:8153:1:-8 8154:8155:1:-100"
+      lc_spec = lc_spec " 8168:8169:1:-8 8170:8171:1:-112 8172:-7 8184:8185:1:-128 8186:8187:1:-126 8188:-9 8486:-7517"
+      lc_spec = lc_spec " 8490:-8383 8491:-8262 8498:28 8544:8559:1:16 8579:1 9398:9423:1:26 11264:11311:1:48 11360:1"
+      lc_spec = lc_spec " 11362:-10743 11363:-3814 11364:-10727 11367:11371:2:1 11373:-10780 11374:-10749 11375:-10783"
+      lc_spec = lc_spec " 11376:-10782 11378:1 11381:1 11390:11391:1:-10815 11392:11490:2:1 11499:11501:2:1 11506:1"
+      lc_spec = lc_spec " 42560:42604:2:1 42624:42650:2:1 42786:42798:2:1 42802:42862:2:1 42873:42875:2:1 42877:-35332"
+      lc_spec = lc_spec " 42878:42886:2:1 42891:1 42893:-42280 42896:42898:2:1 42902:42920:2:1 42922:-42308"
+      lc_spec = lc_spec " 42923:-42319 42924:-42315 42925:-42305 42926:-42308 42928:-42258 42929:-42282 42930:-42261"
+      lc_spec = lc_spec " 42931:928 42932:42946:2:1 42948:-48 42949:-42307 42950:-35384 42951:42953:2:1 42955:-42343"
+      lc_spec = lc_spec " 42956:42970:2:1 42972:-42561 42997:1 65313:65338:1:32 66560:66599:1:40 66736:66771:1:40"
+      lc_spec = lc_spec " 66928:66964:2:39 66929:66937:2:39 66941:66953:2:39 66957:66961:2:39 66965:39"
+      lc_spec = lc_spec " 68736:68786:1:64 68944:68965:1:32 71840:71871:1:32 93760:93791:1:32 93856:93880:1:27"
+      lc_spec = lc_spec " 125184:125217:1:34"
+      n_lc = split(lc_spec, lc_toks, " ")
+      for (ti = 1; ti <= n_lc; ti++) {
+        np = split(lc_toks[ti], lp, ":")
+        if (np == 2) {
+          lc[lp[1] + 0] = (lp[1] + 0) + (lp[2] + 0)
+        } else {
+          la = lp[1] + 0; lb = lp[2] + 0; ls = lp[3] + 0; ld = lp[4] + 0
+          for (lx = la; lx <= lb; lx += ls) lc[lx] = lx + ld
+        }
+      }
     }
     function trim(s) {
       sub(/^[ \t]+/, "", s)
@@ -76,22 +114,73 @@ has_anchor() {
       }
       return out
     }
-    function utf8_lower(s,    out, i, n, b1, b2) {
+    function decode_cp(s, i, n,    b1, b2, b3, b4, cp) {
+      dec_step = 1
+      b1 = ord[substr(s, i, 1)]
+      if (b1 < 128) return b1
+      if (b1 >= 194 && b1 <= 223 && i + 1 <= n) {
+        b2 = ord[substr(s, i + 1, 1)]
+        if (b2 >= 128 && b2 <= 191) {
+          dec_step = 2
+          return (b1 - 192) * 64 + (b2 - 128)
+        }
+      } else if (b1 >= 224 && b1 <= 239 && i + 2 <= n) {
+        b2 = ord[substr(s, i + 1, 1)]
+        b3 = ord[substr(s, i + 2, 1)]
+        if (b2 >= 128 && b2 <= 191 && b3 >= 128 && b3 <= 191) {
+          cp = (b1 - 224) * 4096 + (b2 - 128) * 64 + (b3 - 128)
+          if (cp >= 2048 && !(cp >= 55296 && cp <= 57343)) {
+            dec_step = 3
+            return cp
+          }
+        }
+      } else if (b1 >= 240 && b1 <= 244 && i + 3 <= n) {
+        b2 = ord[substr(s, i + 1, 1)]
+        b3 = ord[substr(s, i + 2, 1)]
+        b4 = ord[substr(s, i + 3, 1)]
+        if (b2 >= 128 && b2 <= 191 && b3 >= 128 && b3 <= 191 && b4 >= 128 && b4 <= 191) {
+          cp = (b1 - 240) * 262144 + (b2 - 128) * 4096 + (b3 - 128) * 64 + (b4 - 128)
+          if (cp >= 65536 && cp <= 1114111) {
+            dec_step = 4
+            return cp
+          }
+        }
+      }
+      return -1
+    }
+    function utf8_encode(cp,    b1, b2, b3, b4) {
+      if (cp < 128) return sprintf("%c", cp)
+      if (cp < 2048) {
+        b1 = 192 + int(cp / 64)
+        b2 = 128 + (cp % 64)
+        return sprintf("%c%c", b1, b2)
+      }
+      if (cp < 65536) {
+        b1 = 224 + int(cp / 4096)
+        b2 = 128 + (int(cp / 64) % 64)
+        b3 = 128 + (cp % 64)
+        return sprintf("%c%c%c", b1, b2, b3)
+      }
+      b1 = 240 + int(cp / 262144)
+      b2 = 128 + (int(cp / 4096) % 64)
+      b3 = 128 + (int(cp / 64) % 64)
+      b4 = 128 + (cp % 64)
+      return sprintf("%c%c%c%c", b1, b2, b3, b4)
+    }
+    function utf8_lower(s,    out, i, n, cp) {
       s = tolower(s)
       out = ""
       n = length(s)
       for (i = 1; i <= n; ) {
-        b1 = ord[substr(s, i, 1)]
-        if (b1 == 195 && i + 1 <= n) {
-          b2 = ord[substr(s, i + 1, 1)]
-          if ((b2 >= 128 && b2 <= 150) || (b2 >= 152 && b2 <= 158)) {
-            out = out sprintf("%c%c", 195, b2 + 32)
-            i += 2
-            continue
-          }
+        cp = decode_cp(s, i, n)
+        if (cp == 304) {
+          out = out "i" utf8_encode(775)
+        } else if (cp in lc) {
+          out = out utf8_encode(lc[cp])
+        } else {
+          out = out substr(s, i, dec_step)
         }
-        out = out substr(s, i, 1)
-        i++
+        i += dec_step
       }
       return out
     }
@@ -131,51 +220,22 @@ has_anchor() {
       gsub(/[`*~]/, "", s)
       return s
     }
-    function slugify(text,    s, out, i, n, b1, b2, b3, b4, cp, step, base, cand, k) {
+    function slugify(text,    s, out, i, n, cp, base, cand, k) {
       s = utf8_lower(trim(strip_inline(text)))
       out = ""
       n = length(s)
       for (i = 1; i <= n; ) {
-        b1 = ord[substr(s, i, 1)]
-        if (b1 < 128) {
-          if (b1 == 32) {
+        cp = decode_cp(s, i, n)
+        if (cp >= 0 && cp < 128) {
+          if (cp == 32) {
             out = out "-"
-          } else if ((b1 >= 97 && b1 <= 122) || (b1 >= 48 && b1 <= 57) || b1 == 45 || b1 == 95) {
+          } else if ((cp >= 97 && cp <= 122) || (cp >= 48 && cp <= 57) || cp == 45 || cp == 95) {
             out = out substr(s, i, 1)
           }
-          i++
-          continue
+        } else if (cp < 0 || !is_stripped_cp(cp)) {
+          out = out substr(s, i, dec_step)
         }
-        cp = -1
-        step = 1
-        if (b1 >= 194 && b1 <= 223 && i + 1 <= n) {
-          b2 = ord[substr(s, i + 1, 1)]
-          if (b2 >= 128 && b2 <= 191) {
-            cp = (b1 - 192) * 64 + (b2 - 128)
-            step = 2
-          }
-        } else if (b1 >= 224 && b1 <= 239 && i + 2 <= n) {
-          b2 = ord[substr(s, i + 1, 1)]
-          b3 = ord[substr(s, i + 2, 1)]
-          if (b2 >= 128 && b2 <= 191 && b3 >= 128 && b3 <= 191) {
-            cp = (b1 - 224) * 4096 + (b2 - 128) * 64 + (b3 - 128)
-            if (cp >= 2048 && !(cp >= 55296 && cp <= 57343)) step = 3
-            else cp = -1
-          }
-        } else if (b1 >= 240 && b1 <= 244 && i + 3 <= n) {
-          b2 = ord[substr(s, i + 1, 1)]
-          b3 = ord[substr(s, i + 2, 1)]
-          b4 = ord[substr(s, i + 3, 1)]
-          if (b2 >= 128 && b2 <= 191 && b3 >= 128 && b3 <= 191 && b4 >= 128 && b4 <= 191) {
-            cp = (b1 - 240) * 262144 + (b2 - 128) * 4096 + (b3 - 128) * 64 + (b4 - 128)
-            if (cp >= 65536 && cp <= 1114111) step = 4
-            else cp = -1
-          }
-        }
-        if (cp < 0 || !is_stripped_cp(cp)) {
-          out = out substr(s, i, step)
-        }
-        i += step
+        i += dec_step
       }
       if (out == "") return ""
       base = out
